@@ -133,6 +133,6 @@ For commercial licensing options, contact: stefano@amorelli.tech
 
 See [SECURITY.md](SECURITY.md) for our security policy.
 
-## Author
+## Copyright
 
-Stefano Amorelli
+Copyright 2025 Stefano Amorelli (https://amorelli.tech)
