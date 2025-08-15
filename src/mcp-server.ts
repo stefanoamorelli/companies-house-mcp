@@ -1,9 +1,6 @@
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
-import {
-  CallToolRequestSchema,
-  ListToolsRequestSchema
-} from '@modelcontextprotocol/sdk/types.js';
+import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import type { Tool } from '@modelcontextprotocol/sdk/types.js';
 import { CompaniesHouseApiClient } from './api-client.js';
 import {
@@ -52,7 +49,7 @@ export class CompaniesHouseMCPServer {
 
     this.server.setRequestHandler(CallToolRequestSchema, async (request) => {
       const { name, arguments: args } = request.params;
-      
+
       try {
         switch (name) {
           case 'search_companies':
@@ -235,7 +232,7 @@ export class CompaniesHouseMCPServer {
   private async handleSearchCompanies(args: unknown) {
     const params = CompanySearchSchema.parse(args);
     const result = await this.apiClient.searchCompanies(params);
-    
+
     return {
       content: [
         {
@@ -249,7 +246,7 @@ export class CompaniesHouseMCPServer {
   private async handleGetCompanyProfile(args: unknown) {
     const params = CompanyProfileSchema.parse(args);
     const result = await this.apiClient.getCompanyProfile(params);
-    
+
     return {
       content: [
         {
@@ -263,7 +260,7 @@ export class CompaniesHouseMCPServer {
   private async handleGetOfficers(args: unknown) {
     const params = OfficersSchema.parse(args);
     const result = await this.apiClient.getOfficers(params);
-    
+
     return {
       content: [
         {
@@ -277,7 +274,7 @@ export class CompaniesHouseMCPServer {
   private async handleGetFilingHistory(args: unknown) {
     const params = FilingHistorySchema.parse(args);
     const result = await this.apiClient.getFilingHistory(params);
-    
+
     return {
       content: [
         {
@@ -291,7 +288,7 @@ export class CompaniesHouseMCPServer {
   private async handleGetPersonsWithSignificantControl(args: unknown) {
     const params = PersonsWithSignificantControlSchema.parse(args);
     const result = await this.apiClient.getPersonsWithSignificantControl(params);
-    
+
     return {
       content: [
         {
@@ -305,7 +302,7 @@ export class CompaniesHouseMCPServer {
   private async handleGetCharges(args: unknown) {
     const params = ChargesSchema.parse(args);
     const result = await this.apiClient.getCharges(params);
-    
+
     return {
       content: [
         {
@@ -319,7 +316,7 @@ export class CompaniesHouseMCPServer {
   async start(): Promise<void> {
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
-    
+
     console.error('Companies House MCP Server running on stdio');
   }
 

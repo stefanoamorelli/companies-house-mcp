@@ -19,7 +19,9 @@ describe('CompaniesHouseMCPServer', () => {
       testConnection: vi.fn()
     };
 
-    (CompaniesHouseApiClient as unknown as ReturnType<typeof vi.fn>).mockImplementation(() => mockApiClient);
+    (CompaniesHouseApiClient as unknown as ReturnType<typeof vi.fn>).mockImplementation(
+      () => mockApiClient
+    );
 
     server = new CompaniesHouseMCPServer({
       apiKey: 'test-api-key',
@@ -47,7 +49,7 @@ describe('CompaniesHouseMCPServer', () => {
   describe('tool handlers', () => {
     const callToolHandler = async (request: { params: { name: string; arguments: unknown } }) => {
       const { name, arguments: args } = request.params;
-      
+
       try {
         switch (name) {
           case 'search_companies': {
@@ -182,7 +184,7 @@ describe('CompaniesHouseMCPServer', () => {
         // Since we're testing validation, the mock won't be called
         // Instead let's test that missing query field causes an error
         mockApiClient.searchCompanies.mockRejectedValue(new Error('query is required'));
-        
+
         const request = {
           params: {
             name: 'search_companies',

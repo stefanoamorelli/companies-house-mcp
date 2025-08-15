@@ -7,7 +7,7 @@ loadEnv();
 
 async function main() {
   const apiKey = process.env.COMPANIES_HOUSE_API_KEY;
-  
+
   if (!apiKey) {
     console.error('Error: COMPANIES_HOUSE_API_KEY environment variable is required');
     console.error('Please set it in your .env file or as an environment variable');

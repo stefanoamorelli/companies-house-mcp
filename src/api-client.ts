@@ -1,8 +1,8 @@
 import axios, { AxiosInstance } from 'axios';
-import { 
-  CompanySearch, 
-  CompanyProfile, 
-  Officers, 
+import {
+  CompanySearch,
+  CompanyProfile,
+  Officers,
   FilingHistory,
   PersonsWithSignificantControl,
   Charges
@@ -20,7 +20,7 @@ export class CompaniesHouseApiClient {
   constructor(config: ApiConfig) {
     this.apiKey = config.apiKey;
     const baseURL = config.baseUrl || 'https://api.company-information.service.gov.uk';
-    
+
     this.client = axios.create({
       baseURL,
       auth: {
@@ -28,14 +28,14 @@ export class CompaniesHouseApiClient {
         password: ''
       },
       headers: {
-        'Accept': 'application/json'
+        Accept: 'application/json'
       },
       timeout: 30000
     });
 
     this.client.interceptors.response.use(
-      response => response,
-      error => Promise.reject(this.transformError(error))
+      (response) => response,
+      (error) => Promise.reject(this.transformError(error))
     );
   }
 
@@ -43,7 +43,7 @@ export class CompaniesHouseApiClient {
     if (axios.isAxiosError(error) && error.response) {
       const status = error.response.status;
       const message = (error.response.data as Record<string, unknown>)?.error || error.message;
-      
+
       switch (status) {
         case 401:
           return new Error(`Authentication failed: ${message}. Please check your API key.`);
@@ -68,7 +68,11 @@ export class CompaniesHouseApiClient {
     }
   }
 
-  async searchCompanies(params: { query: string; items_per_page?: number; start_index?: number }): Promise<CompanySearch> {
+  async searchCompanies(params: {
+    query: string;
+    items_per_page?: number;
+    start_index?: number;
+  }): Promise<CompanySearch> {
     const response = await this.client.get('/search/companies', {
       params: {
         q: params.query,
@@ -84,7 +88,12 @@ export class CompaniesHouseApiClient {
     return response.data;
   }
 
-  async getOfficers(params: { company_number: string; register_type?: string; items_per_page?: number; start_index?: number }): Promise<Officers> {
+  async getOfficers(params: {
+    company_number: string;
+    register_type?: string;
+    items_per_page?: number;
+    start_index?: number;
+  }): Promise<Officers> {
     const response = await this.client.get(`/company/${params.company_number}/officers`, {
       params: {
         items_per_page: params.items_per_page,
@@ -95,7 +104,12 @@ export class CompaniesHouseApiClient {
     return response.data;
   }
 
-  async getFilingHistory(params: { company_number: string; category?: string; items_per_page?: number; start_index?: number }): Promise<FilingHistory> {
+  async getFilingHistory(params: {
+    company_number: string;
+    category?: string;
+    items_per_page?: number;
+    start_index?: number;
+  }): Promise<FilingHistory> {
     const response = await this.client.get(`/company/${params.company_number}/filing-history`, {
       params: {
         items_per_page: params.items_per_page,
@@ -106,17 +120,28 @@ export class CompaniesHouseApiClient {
     return response.data;
   }
 
-  async getPersonsWithSignificantControl(params: { company_number: string; items_per_page?: number; start_index?: number }): Promise<PersonsWithSignificantControl> {
-    const response = await this.client.get(`/company/${params.company_number}/persons-with-significant-control`, {
-      params: {
-        items_per_page: params.items_per_page,
-        start_index: params.start_index
+  async getPersonsWithSignificantControl(params: {
+    company_number: string;
+    items_per_page?: number;
+    start_index?: number;
+  }): Promise<PersonsWithSignificantControl> {
+    const response = await this.client.get(
+      `/company/${params.company_number}/persons-with-significant-control`,
+      {
+        params: {
+          items_per_page: params.items_per_page,
+          start_index: params.start_index
+        }
       }
-    });
+    );
     return response.data;
   }
 
-  async getCharges(params: { company_number: string; items_per_page?: number; start_index?: number }): Promise<Charges> {
+  async getCharges(params: {
+    company_number: string;
+    items_per_page?: number;
+    start_index?: number;
+  }): Promise<Charges> {
     const response = await this.client.get(`/company/${params.company_number}/charges`, {
       params: {
         items_per_page: params.items_per_page,

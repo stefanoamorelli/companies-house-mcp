@@ -11,10 +11,10 @@ describe('CompaniesHouseApiClient', () => {
 
   beforeEach(() => {
     // Mock axios.isAxiosError
-    (axios as any).isAxiosError = vi.fn((error: unknown) => {
+    (axios as unknown as { isAxiosError: typeof vi.fn }).isAxiosError = vi.fn((error: unknown) => {
       return typeof error === 'object' && error !== null && 'isAxiosError' in error;
     });
-    
+
     mockAxiosInstance = {
       get: vi.fn(),
       interceptors: {
@@ -25,9 +25,9 @@ describe('CompaniesHouseApiClient', () => {
         }
       }
     };
-    
+
     (axios.create as ReturnType<typeof vi.fn>).mockReturnValue(mockAxiosInstance as AxiosInstance);
-    
+
     apiClient = new CompaniesHouseApiClient({
       apiKey: 'test-api-key',
       baseUrl: 'https://api.test.com'
@@ -43,7 +43,7 @@ describe('CompaniesHouseApiClient', () => {
           password: ''
         },
         headers: {
-          'Accept': 'application/json'
+          Accept: 'application/json'
         },
         timeout: 30000
       });
@@ -51,7 +51,7 @@ describe('CompaniesHouseApiClient', () => {
 
     it('should use default base URL if not provided', () => {
       new CompaniesHouseApiClient({ apiKey: 'test-key' });
-      
+
       expect(axios.create).toHaveBeenCalledWith(
         expect.objectContaining({
           baseURL: 'https://api.company-information.service.gov.uk'
@@ -272,7 +272,7 @@ describe('CompaniesHouseApiClient', () => {
         isAxiosError: true,
         message: 'Request failed with status code 401'
       };
-      
+
       // The interceptor returns a rejected promise with the transformed error
       mockAxiosInstance.get.mockImplementation(() => {
         // errorTransformer returns a Promise.reject with the transformed error
@@ -283,9 +283,9 @@ describe('CompaniesHouseApiClient', () => {
         }
       });
 
-      await expect(apiClient.searchCompanies({ query: 'test' }))
-        .rejects
-        .toThrow('Authentication failed: Invalid API key. Please check your API key.');
+      await expect(apiClient.searchCompanies({ query: 'test' })).rejects.toThrow(
+        'Authentication failed: Invalid API key. Please check your API key.'
+      );
     });
 
     it('should handle 404 not found error', async () => {
@@ -297,7 +297,7 @@ describe('CompaniesHouseApiClient', () => {
         isAxiosError: true,
         message: 'Request failed with status code 404'
       };
-      
+
       mockAxiosInstance.get.mockImplementation(() => {
         try {
           return errorTransformer(error);
@@ -306,9 +306,9 @@ describe('CompaniesHouseApiClient', () => {
         }
       });
 
-      await expect(apiClient.getCompanyProfile({ company_number: '99999999' }))
-        .rejects
-        .toThrow('Resource not found: Company not found');
+      await expect(apiClient.getCompanyProfile({ company_number: '99999999' })).rejects.toThrow(
+        'Resource not found: Company not found'
+      );
     });
 
     it('should handle 429 rate limit error', async () => {
@@ -320,7 +320,7 @@ describe('CompaniesHouseApiClient', () => {
         isAxiosError: true,
         message: 'Request failed with status code 429'
       };
-      
+
       mockAxiosInstance.get.mockImplementation(() => {
         try {
           return errorTransformer(error);
@@ -329,9 +329,9 @@ describe('CompaniesHouseApiClient', () => {
         }
       });
 
-      await expect(apiClient.searchCompanies({ query: 'test' }))
-        .rejects
-        .toThrow('Rate limit exceeded: Too many requests. Please try again later.');
+      await expect(apiClient.searchCompanies({ query: 'test' })).rejects.toThrow(
+        'Rate limit exceeded: Too many requests. Please try again later.'
+      );
     });
 
     it('should handle server errors', async () => {
@@ -343,7 +343,7 @@ describe('CompaniesHouseApiClient', () => {
         isAxiosError: true,
         message: 'Request failed with status code 500'
       };
-      
+
       mockAxiosInstance.get.mockImplementation(() => {
         try {
           return errorTransformer(error);
@@ -352,9 +352,9 @@ describe('CompaniesHouseApiClient', () => {
         }
       });
 
-      await expect(apiClient.searchCompanies({ query: 'test' }))
-        .rejects
-        .toThrow('Server error: Internal server error. Please try again later.');
+      await expect(apiClient.searchCompanies({ query: 'test' })).rejects.toThrow(
+        'Server error: Internal server error. Please try again later.'
+      );
     });
 
     it('should handle network errors', async () => {
@@ -363,7 +363,7 @@ describe('CompaniesHouseApiClient', () => {
         isAxiosError: true,
         message: 'Network error'
       };
-      
+
       mockAxiosInstance.get.mockImplementation(() => {
         try {
           return errorTransformer(error);
@@ -372,14 +372,14 @@ describe('CompaniesHouseApiClient', () => {
         }
       });
 
-      await expect(apiClient.searchCompanies({ query: 'test' }))
-        .rejects
-        .toThrow('No response from Companies House API. Please check your connection.');
+      await expect(apiClient.searchCompanies({ query: 'test' })).rejects.toThrow(
+        'No response from Companies House API. Please check your connection.'
+      );
     });
 
     it('should handle unknown errors', async () => {
       const error = new Error('Unknown error');
-      
+
       mockAxiosInstance.get.mockImplementation(() => {
         try {
           return errorTransformer(error);
@@ -388,9 +388,9 @@ describe('CompaniesHouseApiClient', () => {
         }
       });
 
-      await expect(apiClient.searchCompanies({ query: 'test' }))
-        .rejects
-        .toThrow('Request error: Unknown error');
+      await expect(apiClient.searchCompanies({ query: 'test' })).rejects.toThrow(
+        'Request error: Unknown error'
+      );
     });
   });
 });

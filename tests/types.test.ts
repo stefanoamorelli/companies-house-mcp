@@ -36,27 +36,32 @@ describe('Type Schemas', () => {
     });
 
     it('should reject empty query', () => {
-      expect(() => CompanySearchSchema.parse({ query: '' }))
-        .toThrow();
+      expect(() => CompanySearchSchema.parse({ query: '' })).toThrow();
     });
 
     it('should reject invalid items_per_page', () => {
-      expect(() => CompanySearchSchema.parse({ 
-        query: 'test', 
-        items_per_page: 0 
-      })).toThrow();
+      expect(() =>
+        CompanySearchSchema.parse({
+          query: 'test',
+          items_per_page: 0
+        })
+      ).toThrow();
 
-      expect(() => CompanySearchSchema.parse({ 
-        query: 'test', 
-        items_per_page: 101 
-      })).toThrow();
+      expect(() =>
+        CompanySearchSchema.parse({
+          query: 'test',
+          items_per_page: 101
+        })
+      ).toThrow();
     });
 
     it('should reject negative start_index', () => {
-      expect(() => CompanySearchSchema.parse({ 
-        query: 'test', 
-        start_index: -1 
-      })).toThrow();
+      expect(() =>
+        CompanySearchSchema.parse({
+          query: 'test',
+          start_index: -1
+        })
+      ).toThrow();
     });
   });
 
@@ -68,13 +73,11 @@ describe('Type Schemas', () => {
     });
 
     it('should reject empty company number', () => {
-      expect(() => CompanyProfileSchema.parse({ company_number: '' }))
-        .toThrow();
+      expect(() => CompanyProfileSchema.parse({ company_number: '' })).toThrow();
     });
 
     it('should reject missing company number', () => {
-      expect(() => CompanyProfileSchema.parse({}))
-        .toThrow();
+      expect(() => CompanyProfileSchema.parse({})).toThrow();
     });
   });
 
@@ -99,8 +102,8 @@ describe('Type Schemas', () => {
 
     it('should validate register_type enum values', () => {
       const validTypes = ['directors', 'secretaries', 'llp-members'];
-      
-      validTypes.forEach(type => {
+
+      validTypes.forEach((type) => {
         const result = OfficersSchema.parse({
           company_number: '12345678',
           register_type: type
@@ -110,10 +113,12 @@ describe('Type Schemas', () => {
     });
 
     it('should reject invalid register_type', () => {
-      expect(() => OfficersSchema.parse({
-        company_number: '12345678',
-        register_type: 'invalid'
-      })).toThrow();
+      expect(() =>
+        OfficersSchema.parse({
+          company_number: '12345678',
+          register_type: 'invalid'
+        })
+      ).toThrow();
     });
   });
 
@@ -166,10 +171,12 @@ describe('Type Schemas', () => {
     });
 
     it('should enforce pagination limits', () => {
-      expect(() => PersonsWithSignificantControlSchema.parse({
-        company_number: '12345678',
-        items_per_page: 101
-      })).toThrow();
+      expect(() =>
+        PersonsWithSignificantControlSchema.parse({
+          company_number: '12345678',
+          items_per_page: 101
+        })
+      ).toThrow();
     });
   });
 
@@ -192,15 +199,19 @@ describe('Type Schemas', () => {
     });
 
     it('should enforce pagination limits', () => {
-      expect(() => ChargesSchema.parse({
-        company_number: '12345678',
-        items_per_page: 0
-      })).toThrow();
+      expect(() =>
+        ChargesSchema.parse({
+          company_number: '12345678',
+          items_per_page: 0
+        })
+      ).toThrow();
 
-      expect(() => ChargesSchema.parse({
-        company_number: '12345678',
-        items_per_page: 101
-      })).toThrow();
+      expect(() =>
+        ChargesSchema.parse({
+          company_number: '12345678',
+          items_per_page: 101
+        })
+      ).toThrow();
     });
   });
 });
