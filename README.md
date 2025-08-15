@@ -129,10 +129,6 @@ GNU Affero General Public License v3.0 - see [LICENSE](LICENSE) file for details
 
 For commercial licensing options, contact: stefano@amorelli.tech
 
-## Security
-
-See [SECURITY.md](SECURITY.md) for our security policy.
-
 ## Copyright
 
 Copyright 2025 Stefano Amorelli (https://amorelli.tech)
