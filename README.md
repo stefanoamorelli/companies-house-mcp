@@ -53,7 +53,14 @@ Add to your [Claude Desktop](https://claude.ai/download) config (`~/Library/Appl
 ## Available Tools
 
 ### search_companies
-Search for companies by name or number using the [Company Search API](https://developer.company-information.service.gov.uk/api/docs/search/companies/companysearch.html).
+**Tool:** `search_companies`  
+**API Endpoint:** `GET /search/companies`  
+**Documentation:** [Company Search API](https://developer.company-information.service.gov.uk/api/docs/search/companies/companysearch.html)
+
+Example queries:
+- "Find companies named Tesla"
+- "Search for company number 12345678"
+- "Look up British Airways companies"
 
 ```json
 {
@@ -64,7 +71,14 @@ Search for companies by name or number using the [Company Search API](https://de
 ```
 
 ### get_company_profile
-Get detailed company information.
+**Tool:** `get_company_profile`  
+**API Endpoint:** `GET /company/{company_number}`  
+**Documentation:** [Company Profile API](https://developer.company-information.service.gov.uk/api/docs/company/company_number/readCompanyProfile.html)
+
+Example queries:
+- "Get details for company 13448796"
+- "Show me the profile of OpenAI UK Limited"
+- "What's the status of company number 00000001?"
 
 ```json
 {
@@ -73,7 +87,14 @@ Get detailed company information.
 ```
 
 ### get_officers
-List company directors and officers.
+**Tool:** `get_officers`  
+**API Endpoint:** `GET /company/{company_number}/officers`  
+**Documentation:** [Officers API](https://developer.company-information.service.gov.uk/api/docs/company/company_number/officers/officerList.html)
+
+Example queries:
+- "Who are the directors of company 13448796?"
+- "List all officers for Tesla UK"
+- "Show me the company secretaries"
 
 ```json
 {
@@ -83,7 +104,14 @@ List company directors and officers.
 ```
 
 ### get_filing_history
-View company filing history.
+**Tool:** `get_filing_history`  
+**API Endpoint:** `GET /company/{company_number}/filing-history`  
+**Documentation:** [Filing History API](https://developer.company-information.service.gov.uk/api/docs/company/company_number/filing-history/getFilingHistoryList.html)
+
+Example queries:
+- "Show recent filings for company 13448796"
+- "What accounts has this company filed?"
+- "Get the annual returns history"
 
 ```json
 {
@@ -93,7 +121,14 @@ View company filing history.
 ```
 
 ### get_persons_with_significant_control
-Get PSC information.
+**Tool:** `get_persons_with_significant_control`  
+**API Endpoint:** `GET /company/{company_number}/persons-with-significant-control`  
+**Documentation:** [PSC API](https://developer.company-information.service.gov.uk/api/docs/company/company_number/persons-with-significant-control/listPersonsWithSignificantControl.html)
+
+Example queries:
+- "Who owns more than 25% of company 13448796?"
+- "Show beneficial owners"
+- "List persons with significant control"
 
 ```json
 {
@@ -102,7 +137,14 @@ Get PSC information.
 ```
 
 ### get_charges
-View registered charges.
+**Tool:** `get_charges`  
+**API Endpoint:** `GET /company/{company_number}/charges`  
+**Documentation:** [Charges API](https://developer.company-information.service.gov.uk/api/docs/company/company_number/charges/getChargeList.html)
+
+Example queries:
+- "Does company 13448796 have any mortgages?"
+- "Show registered charges"
+- "List all debentures for this company"
 
 ```json
 {
