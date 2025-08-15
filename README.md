@@ -1,10 +1,10 @@
 # Companies House MCP Server
 
-Access UK company data through the Companies House API directly in Claude.
+Access UK company data through the Companies House API directly in MCP clients.
 
 ## What it does
 
-This MCP server lets you search and retrieve information about UK companies, including:
+This [MCP](https://modelcontextprotocol.io) server lets you search and retrieve information about UK companies, including:
 - Company details and registration info
 - Directors and officers
 - Filing history
@@ -15,7 +15,7 @@ This MCP server lets you search and retrieve information about UK companies, inc
 
 ### Get an API key
 
-1. Register at https://developer.company-information.service.gov.uk/
+1. Register at [Companies House Developer Hub](https://developer.company-information.service.gov.uk/)
 2. Create an application to get your API key
 
 ### Install
@@ -34,7 +34,7 @@ COMPANIES_HOUSE_API_KEY=your_api_key_here
 
 ### Add to Claude Desktop
 
-Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_desktop_config.json` on Mac):
+Add to your [Claude Desktop](https://claude.ai/download) config (`~/Library/Application Support/Claude/claude_desktop_config.json` on Mac):
 
 ```json
 {
