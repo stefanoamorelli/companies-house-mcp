@@ -232,7 +232,7 @@ export class CompaniesHouseMCPServer {
     ];
   }
 
-  private async handleSearchCompanies(args: any) {
+  private async handleSearchCompanies(args: unknown) {
     const params = CompanySearchSchema.parse(args);
     const result = await this.apiClient.searchCompanies(params);
     
@@ -246,7 +246,7 @@ export class CompaniesHouseMCPServer {
     };
   }
 
-  private async handleGetCompanyProfile(args: any) {
+  private async handleGetCompanyProfile(args: unknown) {
     const params = CompanyProfileSchema.parse(args);
     const result = await this.apiClient.getCompanyProfile(params);
     
@@ -260,7 +260,7 @@ export class CompaniesHouseMCPServer {
     };
   }
 
-  private async handleGetOfficers(args: any) {
+  private async handleGetOfficers(args: unknown) {
     const params = OfficersSchema.parse(args);
     const result = await this.apiClient.getOfficers(params);
     
@@ -274,7 +274,7 @@ export class CompaniesHouseMCPServer {
     };
   }
 
-  private async handleGetFilingHistory(args: any) {
+  private async handleGetFilingHistory(args: unknown) {
     const params = FilingHistorySchema.parse(args);
     const result = await this.apiClient.getFilingHistory(params);
     
@@ -288,7 +288,7 @@ export class CompaniesHouseMCPServer {
     };
   }
 
-  private async handleGetPersonsWithSignificantControl(args: any) {
+  private async handleGetPersonsWithSignificantControl(args: unknown) {
     const params = PersonsWithSignificantControlSchema.parse(args);
     const result = await this.apiClient.getPersonsWithSignificantControl(params);
     
@@ -302,7 +302,7 @@ export class CompaniesHouseMCPServer {
     };
   }
 
-  private async handleGetCharges(args: any) {
+  private async handleGetCharges(args: unknown) {
     const params = ChargesSchema.parse(args);
     const result = await this.apiClient.getCharges(params);
     

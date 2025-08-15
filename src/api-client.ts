@@ -39,10 +39,10 @@ export class CompaniesHouseApiClient {
     );
   }
 
-  private transformError(error: any): Error {
-    if (error.response) {
+  private transformError(error: unknown): Error {
+    if (axios.isAxiosError(error) && error.response) {
       const status = error.response.status;
-      const message = error.response.data?.error || error.message;
+      const message = (error.response.data as Record<string, unknown>)?.error || error.message;
       
       switch (status) {
         case 401:
@@ -59,14 +59,16 @@ export class CompaniesHouseApiClient {
         default:
           return new Error(`API error (${status}): ${message}`);
       }
-    } else if (error.request) {
+    } else if (axios.isAxiosError(error) && error.request) {
       return new Error('No response from Companies House API. Please check your connection.');
-    } else {
+    } else if (error instanceof Error) {
       return new Error(`Request error: ${error.message}`);
+    } else {
+      return new Error('An unexpected error occurred');
     }
   }
 
-  async searchCompanies(params: CompanySearch): Promise<any> {
+  async searchCompanies(params: { query: string; items_per_page?: number; start_index?: number }): Promise<CompanySearch> {
     const response = await this.client.get('/search/companies', {
       params: {
         q: params.query,
@@ -77,12 +79,12 @@ export class CompaniesHouseApiClient {
     return response.data;
   }
 
-  async getCompanyProfile(params: CompanyProfile): Promise<any> {
+  async getCompanyProfile(params: { company_number: string }): Promise<CompanyProfile> {
     const response = await this.client.get(`/company/${params.company_number}`);
     return response.data;
   }
 
-  async getOfficers(params: Officers): Promise<any> {
+  async getOfficers(params: { company_number: string; register_type?: string; items_per_page?: number; start_index?: number }): Promise<Officers> {
     const response = await this.client.get(`/company/${params.company_number}/officers`, {
       params: {
         items_per_page: params.items_per_page,
@@ -93,7 +95,7 @@ export class CompaniesHouseApiClient {
     return response.data;
   }
 
-  async getFilingHistory(params: FilingHistory): Promise<any> {
+  async getFilingHistory(params: { company_number: string; category?: string; items_per_page?: number; start_index?: number }): Promise<FilingHistory> {
     const response = await this.client.get(`/company/${params.company_number}/filing-history`, {
       params: {
         items_per_page: params.items_per_page,
@@ -104,7 +106,7 @@ export class CompaniesHouseApiClient {
     return response.data;
   }
 
-  async getPersonsWithSignificantControl(params: PersonsWithSignificantControl): Promise<any> {
+  async getPersonsWithSignificantControl(params: { company_number: string; items_per_page?: number; start_index?: number }): Promise<PersonsWithSignificantControl> {
     const response = await this.client.get(`/company/${params.company_number}/persons-with-significant-control`, {
       params: {
         items_per_page: params.items_per_page,
@@ -114,7 +116,7 @@ export class CompaniesHouseApiClient {
     return response.data;
   }
 
-  async getCharges(params: Charges): Promise<any> {
+  async getCharges(params: { company_number: string; items_per_page?: number; start_index?: number }): Promise<Charges> {
     const response = await this.client.get(`/company/${params.company_number}/charges`, {
       params: {
         items_per_page: params.items_per_page,

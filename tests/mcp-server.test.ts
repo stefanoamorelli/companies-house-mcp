@@ -6,7 +6,7 @@ vi.mock('../src/api-client');
 
 describe('CompaniesHouseMCPServer', () => {
   let server: CompaniesHouseMCPServer;
-  let mockApiClient: any;
+  let mockApiClient: Partial<CompaniesHouseApiClient>;
 
   beforeEach(() => {
     mockApiClient = {
@@ -19,7 +19,7 @@ describe('CompaniesHouseMCPServer', () => {
       testConnection: vi.fn()
     };
 
-    (CompaniesHouseApiClient as any).mockImplementation(() => mockApiClient);
+    (CompaniesHouseApiClient as unknown as ReturnType<typeof vi.fn>).mockImplementation(() => mockApiClient);
 
     server = new CompaniesHouseMCPServer({
       apiKey: 'test-api-key',
@@ -45,12 +45,12 @@ describe('CompaniesHouseMCPServer', () => {
   });
 
   describe('tool handlers', () => {
-    const callToolHandler = async (request: any) => {
+    const callToolHandler = async (request: { params: { name: string; arguments: unknown } }) => {
       const { name, arguments: args } = request.params;
       
       try {
         switch (name) {
-          case 'search_companies':
+          case 'search_companies': {
             const searchParams = args;
             const searchResult = await mockApiClient.searchCompanies(searchParams);
             return {
@@ -61,7 +61,8 @@ describe('CompaniesHouseMCPServer', () => {
                 }
               ]
             };
-          case 'get_company_profile':
+          }
+          case 'get_company_profile': {
             const profileParams = args;
             const profileResult = await mockApiClient.getCompanyProfile(profileParams);
             return {
@@ -72,7 +73,8 @@ describe('CompaniesHouseMCPServer', () => {
                 }
               ]
             };
-          case 'get_officers':
+          }
+          case 'get_officers': {
             const officersParams = args;
             const officersResult = await mockApiClient.getOfficers(officersParams);
             return {
@@ -83,7 +85,8 @@ describe('CompaniesHouseMCPServer', () => {
                 }
               ]
             };
-          case 'get_filing_history':
+          }
+          case 'get_filing_history': {
             const filingParams = args;
             const filingResult = await mockApiClient.getFilingHistory(filingParams);
             return {
@@ -94,7 +97,8 @@ describe('CompaniesHouseMCPServer', () => {
                 }
               ]
             };
-          case 'get_persons_with_significant_control':
+          }
+          case 'get_persons_with_significant_control': {
             const pscParams = args;
             const pscResult = await mockApiClient.getPersonsWithSignificantControl(pscParams);
             return {
@@ -105,7 +109,8 @@ describe('CompaniesHouseMCPServer', () => {
                 }
               ]
             };
-          case 'get_charges':
+          }
+          case 'get_charges': {
             const chargesParams = args;
             const chargesResult = await mockApiClient.getCharges(chargesParams);
             return {
@@ -116,6 +121,7 @@ describe('CompaniesHouseMCPServer', () => {
                 }
               ]
             };
+          }
           default:
             throw new Error(`Unknown tool: ${name}`);
         }

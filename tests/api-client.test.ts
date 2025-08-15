@@ -1,15 +1,20 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { CompaniesHouseApiClient } from '../src/api-client';
 
 vi.mock('axios');
 
 describe('CompaniesHouseApiClient', () => {
   let apiClient: CompaniesHouseApiClient;
-  let mockAxiosInstance: any;
-  let errorTransformer: any;
+  let mockAxiosInstance: Partial<AxiosInstance>;
+  let errorTransformer: ((error: unknown) => unknown) | undefined;
 
   beforeEach(() => {
+    // Mock axios.isAxiosError
+    (axios as any).isAxiosError = vi.fn((error: unknown) => {
+      return typeof error === 'object' && error !== null && 'isAxiosError' in error;
+    });
+    
     mockAxiosInstance = {
       get: vi.fn(),
       interceptors: {
@@ -21,7 +26,7 @@ describe('CompaniesHouseApiClient', () => {
       }
     };
     
-    (axios.create as any).mockReturnValue(mockAxiosInstance);
+    (axios.create as ReturnType<typeof vi.fn>).mockReturnValue(mockAxiosInstance as AxiosInstance);
     
     apiClient = new CompaniesHouseApiClient({
       apiKey: 'test-api-key',
