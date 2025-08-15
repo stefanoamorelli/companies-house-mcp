@@ -1,15 +1,15 @@
 # Companies House MCP Server
 
-Access UK company data through the Companies House API directly in MCP clients.
+Access UK company data through the [Companies House API](https://developer.company-information.service.gov.uk/api/docs/) directly in [MCP clients](https://modelcontextprotocol.io/clients).
 
 ## What it does
 
 This [MCP](https://modelcontextprotocol.io) server lets you search and retrieve information about UK companies, including:
-- Company details and registration info
-- Directors and officers
-- Filing history
-- Persons with significant control (PSC)
-- Registered charges
+- [Company profile](https://developer.company-information.service.gov.uk/api/docs/company/company_number/readCompanyProfile.html) - registration info, status, and key dates
+- [Directors and officers](https://developer.company-information.service.gov.uk/api/docs/company/company_number/officers/officerList.html) - current and past company officials
+- [Filing history](https://developer.company-information.service.gov.uk/api/docs/company/company_number/filing-history/getFilingHistoryList.html) - accounts, annual returns, and other documents
+- [Persons with significant control (PSC)](https://developer.company-information.service.gov.uk/api/docs/company/company_number/persons-with-significant-control/listPersonsWithSignificantControl.html) - beneficial ownership information
+- [Registered charges](https://developer.company-information.service.gov.uk/api/docs/company/company_number/charges/getChargeList.html) - mortgages and debentures
 
 ## Setup
 
@@ -53,7 +53,7 @@ Add to your [Claude Desktop](https://claude.ai/download) config (`~/Library/Appl
 ## Available Tools
 
 ### search_companies
-Search for companies by name or number.
+Search for companies by name or number using the [Company Search API](https://developer.company-information.service.gov.uk/api/docs/search/companies/companysearch.html).
 
 ```json
 {
