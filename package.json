@@ -1,5 +1,5 @@
 {
-  "name": "@stefanoamorelli/companies-house-mcp",
+  "name": "companies-house-mcp-server",
   "version": "1.0.1",
   "description": "MCP server for Companies House API integration",
   "main": "dist/index.js",
