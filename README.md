@@ -20,23 +20,50 @@ This [MCP](https://modelcontextprotocol.io) server lets you search and retrieve 
 
 ### Install
 
+The server is available on npm and can be run directly using npx:
+
 ```bash
-npm install
-npm run build
+npm install -g companies-house-mcp-server
 ```
 
-### Configure
+Or use it directly with npx (recommended):
 
-Create a `.env` file:
-```env
-COMPANIES_HOUSE_API_KEY=your_api_key_here
+```bash
+npx companies-house-mcp-server
 ```
 
-### Add to Claude Desktop
+### Configure Claude Desktop
 
-Add to your [Claude Desktop](https://claude.ai/download) config (`~/Library/Application Support/Claude/claude_desktop_config.json` on Mac):
+Add to your [Claude Desktop](https://claude.ai/download) config:
+
+**Mac**: `~/Library/Application Support/Claude/claude_desktop_config.json`  
+**Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
 
 ```json
+{
+  "mcpServers": {
+    "companies-house": {
+      "command": "npx",
+      "args": ["-y", "companies-house-mcp-server"],
+      "env": {
+        "COMPANIES_HOUSE_API_KEY": "your_api_key_here"
+      }
+    }
+  }
+}
+```
+
+### Build from source (optional)
+
+If you want to build from source:
+
+```bash
+git clone https://github.com/stefanoamorelli/companies-house-mcp.git
+cd companies-house-mcp
+npm install
+npm run build
+
+# Then use in Claude Desktop config:
 {
   "mcpServers": {
     "companies-house": {
