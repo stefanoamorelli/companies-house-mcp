@@ -1,0 +1,42 @@
+name: companies-house-mcp
+version: 1.0.1
+description: MCP server for Companies House API integration - Search and retrieve UK company information
+author: Stefano Amorelli
+license: AGPL-3.0
+repository: https://github.com/stefanoamorelli/companies-house-mcp
+homepage: https://github.com/stefanoamorelli/companies-house-mcp
+categories:
+  - business
+  - finance
+  - uk
+  - api
+keywords:
+  - companies-house
+  - uk-companies
+  - business-search
+  - company-data
+runtime: node
+main: dist/index.js
+dockerImage: stefanoamorelli/companies-house-mcp:latest
+environmentVariables:
+  COMPANIES_HOUSE_API_KEY:
+    description: Your Companies House API key
+    required: true
+    secret: true
+tools:
+  - name: search_companies
+    description: Search for UK companies by name
+  - name: get_company_profile
+    description: Get detailed profile information for a specific company
+  - name: get_company_officers
+    description: Get list of company officers (directors, secretaries, etc.)
+  - name: get_filing_history
+    description: Get company filing history (accounts, returns, etc.)
+  - name: get_persons_with_significant_control
+    description: Get information about persons with significant control
+  - name: get_registered_office_address
+    description: Get the registered office address for a company
+  - name: search_officers
+    description: Search for officers by name
+  - name: search_disqualified_officers
+    description: Search for disqualified officers
