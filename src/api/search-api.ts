@@ -5,11 +5,15 @@ import type {
   SearchOfficers,
   SearchDisqualifiedOfficers,
   AlphabeticalSearch,
-  DissolvedSearch
+  DissolvedSearch,
+  CompanySearchResponse,
+  SearchResponse,
+  OfficerSearchResponse,
+  DisqualifiedOfficerSearchResponse
 } from '../types/index.js';
 
 export class SearchApiClient extends BaseApiClient {
-  async advancedCompanySearch(params: AdvancedCompanySearch): Promise<any> {
+  async advancedCompanySearch(params: AdvancedCompanySearch): Promise<CompanySearchResponse> {
     const response = await this.client.get('/advanced-search/companies', {
       params: {
         company_name: params.company_name,
@@ -30,7 +34,7 @@ export class SearchApiClient extends BaseApiClient {
     return response.data;
   }
 
-  async searchAll(params: SearchAll): Promise<any> {
+  async searchAll(params: SearchAll): Promise<SearchResponse> {
     const response = await this.client.get('/search', {
       params: {
         q: params.query,
@@ -41,7 +45,7 @@ export class SearchApiClient extends BaseApiClient {
     return response.data;
   }
 
-  async searchOfficers(params: SearchOfficers): Promise<any> {
+  async searchOfficers(params: SearchOfficers): Promise<OfficerSearchResponse> {
     const response = await this.client.get('/search/officers', {
       params: {
         q: params.query,
@@ -52,7 +56,7 @@ export class SearchApiClient extends BaseApiClient {
     return response.data;
   }
 
-  async searchDisqualifiedOfficers(params: SearchDisqualifiedOfficers): Promise<any> {
+  async searchDisqualifiedOfficers(params: SearchDisqualifiedOfficers): Promise<DisqualifiedOfficerSearchResponse> {
     const response = await this.client.get('/search/disqualified-officers', {
       params: {
         q: params.query,
@@ -63,7 +67,7 @@ export class SearchApiClient extends BaseApiClient {
     return response.data;
   }
 
-  async alphabeticalSearch(params: AlphabeticalSearch): Promise<any> {
+  async alphabeticalSearch(params: AlphabeticalSearch): Promise<CompanySearchResponse> {
     const response = await this.client.get('/alphabetical-search/companies', {
       params: {
         q: params.query,
@@ -74,7 +78,7 @@ export class SearchApiClient extends BaseApiClient {
     return response.data;
   }
 
-  async dissolvedSearch(params: DissolvedSearch): Promise<any> {
+  async dissolvedSearch(params: DissolvedSearch): Promise<CompanySearchResponse> {
     const response = await this.client.get('/dissolved-search/companies', {
       params: {
         q: params.query,

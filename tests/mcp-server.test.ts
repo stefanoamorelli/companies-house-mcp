@@ -5,9 +5,32 @@ vi.mock('../src/api/client');
 
 import { CompaniesHouseApiClient } from '../src/api/client';
 
+interface MockApiClient {
+  company: {
+    searchCompanies: ReturnType<typeof vi.fn>;
+    getCompanyProfile: ReturnType<typeof vi.fn>;
+  };
+  search: {
+    searchCompanies: ReturnType<typeof vi.fn>;
+  };
+  officers: {
+    getOfficers: ReturnType<typeof vi.fn>;
+  };
+  filing: {
+    getFilingHistory: ReturnType<typeof vi.fn>;
+  };
+  charges: {
+    getCharges: ReturnType<typeof vi.fn>;
+  };
+  psc: {
+    getPersonsWithSignificantControl: ReturnType<typeof vi.fn>;
+  };
+  testConnection: ReturnType<typeof vi.fn>;
+}
+
 describe('CompaniesHouseMCPServer', () => {
   let server: CompaniesHouseMCPServer;
-  let mockApiClient: any;
+  let mockApiClient: MockApiClient;
 
   beforeEach(() => {
     mockApiClient = {
@@ -33,7 +56,7 @@ describe('CompaniesHouseMCPServer', () => {
       testConnection: vi.fn()
     };
 
-    vi.mocked(CompaniesHouseApiClient).mockImplementation(() => mockApiClient as any);
+    vi.mocked(CompaniesHouseApiClient).mockImplementation(() => mockApiClient as unknown as CompaniesHouseApiClient);
 
     server = new CompaniesHouseMCPServer({
       apiKey: 'test-api-key',

@@ -1,10 +1,13 @@
 import { BaseApiClient } from './base-client.js';
 import type {
-  Officers,
   OfficerAppointment,
   CorporateOfficerDisqualification,
   NaturalOfficerDisqualification,
-  OfficerAppointmentsList
+  OfficerAppointmentsList,
+  OfficersResponse,
+  Appointment,
+  Disqualification,
+  AppointmentsList
 } from '../types/index.js';
 
 export class OfficersApiClient extends BaseApiClient {
@@ -13,7 +16,7 @@ export class OfficersApiClient extends BaseApiClient {
     register_type?: string;
     items_per_page?: number;
     start_index?: number;
-  }): Promise<Officers> {
+  }): Promise<OfficersResponse> {
     const response = await this.client.get(`/company/${params.company_number}/officers`, {
       params: {
         items_per_page: params.items_per_page,
@@ -24,7 +27,7 @@ export class OfficersApiClient extends BaseApiClient {
     return response.data;
   }
 
-  async getOfficerAppointment(params: OfficerAppointment): Promise<any> {
+  async getOfficerAppointment(params: OfficerAppointment): Promise<Appointment> {
     const response = await this.client.get(
       `/company/${params.company_number}/appointments/${params.appointment_id}`
     );
@@ -33,17 +36,17 @@ export class OfficersApiClient extends BaseApiClient {
 
   async getCorporateOfficerDisqualification(
     params: CorporateOfficerDisqualification
-  ): Promise<any> {
+  ): Promise<Disqualification> {
     const response = await this.client.get(`/disqualified-officers/corporate/${params.officer_id}`);
     return response.data;
   }
 
-  async getNaturalOfficerDisqualification(params: NaturalOfficerDisqualification): Promise<any> {
+  async getNaturalOfficerDisqualification(params: NaturalOfficerDisqualification): Promise<Disqualification> {
     const response = await this.client.get(`/disqualified-officers/natural/${params.officer_id}`);
     return response.data;
   }
 
-  async getOfficerAppointmentsList(params: OfficerAppointmentsList): Promise<any> {
+  async getOfficerAppointmentsList(params: OfficerAppointmentsList): Promise<AppointmentsList> {
     const response = await this.client.get(`/officers/${params.officer_id}/appointments`, {
       params: {
         items_per_page: params.items_per_page,

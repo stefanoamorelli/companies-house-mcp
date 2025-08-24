@@ -1,5 +1,5 @@
 import { BaseApiClient } from './base-client.js';
-import type { FilingHistory, FilingHistoryItem } from '../types/index.js';
+import type { FilingHistoryItem, FilingItem, FilingHistoryResponse } from '../types/index.js';
 
 export class FilingApiClient extends BaseApiClient {
   async getFilingHistory(params: {
@@ -7,7 +7,7 @@ export class FilingApiClient extends BaseApiClient {
     category?: string;
     items_per_page?: number;
     start_index?: number;
-  }): Promise<FilingHistory> {
+  }): Promise<FilingHistoryResponse> {
     const response = await this.client.get(`/company/${params.company_number}/filing-history`, {
       params: {
         items_per_page: params.items_per_page,
@@ -18,7 +18,7 @@ export class FilingApiClient extends BaseApiClient {
     return response.data;
   }
 
-  async getFilingHistoryItem(params: FilingHistoryItem): Promise<any> {
+  async getFilingHistoryItem(params: FilingHistoryItem): Promise<FilingItem> {
     const response = await this.client.get(
       `/company/${params.company_number}/filing-history/${params.transaction_id}`
     );
