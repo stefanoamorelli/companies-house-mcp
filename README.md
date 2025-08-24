@@ -4,12 +4,43 @@ Access UK company data through the [Companies House API](https://developer.compa
 
 ## What it does
 
-This [MCP](https://modelcontextprotocol.io) server lets you search and retrieve information about UK companies, including:
+This [MCP](https://modelcontextprotocol.io) server provides comprehensive access to UK company information through 45+ endpoints, including:
+
+### Company Information
 - [Company profile](https://developer.company-information.service.gov.uk/api/docs/company/company_number/readCompanyProfile.html) - registration info, status, and key dates
+- [Registered office address](https://developer.company-information.service.gov.uk/api/docs/company/company_number/registered-office-address/readRegisteredOfficeAddress.html) - official company address
+- [Company registers](https://developer.company-information.service.gov.uk/api/docs/company/company_number/registers/readCompanyRegister.html) - available registers
+- [Insolvency information](https://developer.company-information.service.gov.uk/api/docs/company/company_number/insolvency/readCompanyInsolvency.html) - insolvency status and proceedings
+- [Exemptions](https://developer.company-information.service.gov.uk/api/docs/company/company_number/exemptions/readCompanyExemptions.html) - disclosure exemptions
+- [UK establishments](https://developer.company-information.service.gov.uk/api/docs/company/company_number/uk-establishments/readUKEstablishments.html) - UK branches of foreign companies
+
+### Search Capabilities
+- Company search - basic and advanced search with multiple filters
+- Search all - unified search across all resource types
+- Officer search - find company officers by name
+- Disqualified officers search - search disqualified directors
+- Alphabetical search - companies by name prefix
+- Dissolved companies search - find dissolved companies
+
+### Officers & Appointments
 - [Directors and officers](https://developer.company-information.service.gov.uk/api/docs/company/company_number/officers/officerList.html) - current and past company officials
+- Individual officer appointments - specific appointment details
+- Officer appointment history - all appointments for an officer
+- Officer disqualifications - corporate and natural person disqualifications
+
+### Filing & Documents
 - [Filing history](https://developer.company-information.service.gov.uk/api/docs/company/company_number/filing-history/getFilingHistoryList.html) - accounts, annual returns, and other documents
-- [Persons with significant control (PSC)](https://developer.company-information.service.gov.uk/api/docs/company/company_number/persons-with-significant-control/listPersonsWithSignificantControl.html) - beneficial ownership information
+- Individual filing items - specific document details
+
+### Ownership & Control
+- [Persons with significant control (PSC)](https://developer.company-information.service.gov.uk/api/docs/company/company_number/persons-with-significant-control/listPersonsWithSignificantControl.html) - beneficial ownership
+- PSC individuals, corporate entities, and legal persons - detailed PSC information
+- PSC statements - notifications and declarations
+- PSC verification states and full records
+
+### Financial
 - [Registered charges](https://developer.company-information.service.gov.uk/api/docs/company/company_number/charges/getChargeList.html) - mortgages and debentures
+- Individual charge details - specific charge information
 
 ## Setup
 
@@ -79,16 +110,10 @@ npm run build
 
 ## Available Tools
 
-### search_companies
-**Tool:** `search_companies`  
-**API Endpoint:** `GET /search/companies`  
-**Documentation:** [Company Search API](https://developer.company-information.service.gov.uk/api/docs/search/companies/companysearch.html)
+### Company Information Tools
 
-Example queries:
-- "Find companies named Tesla"
-- "Search for company number 12345678"
-- "Look up British Airways companies"
-
+#### search_companies
+Search for companies by name or company number
 ```json
 {
   "query": "OpenAI",
@@ -97,86 +122,298 @@ Example queries:
 }
 ```
 
-### get_company_profile
-**Tool:** `get_company_profile`  
-**API Endpoint:** `GET /company/{company_number}`  
-**Documentation:** [Company Profile API](https://developer.company-information.service.gov.uk/api/docs/company/company_number/readCompanyProfile.html)
-
-Example queries:
-- "Get details for company 13448796"
-- "Show me the profile of OpenAI UK Limited"
-- "What's the status of company number 00000001?"
-
+#### get_company_profile
+Get detailed company information
 ```json
 {
   "company_number": "13448796"
 }
 ```
 
-### get_officers
-**Tool:** `get_officers`  
-**API Endpoint:** `GET /company/{company_number}/officers`  
-**Documentation:** [Officers API](https://developer.company-information.service.gov.uk/api/docs/company/company_number/officers/officerList.html)
+#### get_registered_office_address
+Get the registered office address
+```json
+{
+  "company_number": "13448796"
+}
+```
 
-Example queries:
-- "Who are the directors of company 13448796?"
-- "List all officers for Tesla UK"
-- "Show me the company secretaries"
+#### get_registers
+Get information about company registers
+```json
+{
+  "company_number": "13448796"
+}
+```
 
+#### get_insolvency
+Get company insolvency information
+```json
+{
+  "company_number": "13448796"
+}
+```
+
+#### get_exemptions
+Get company exemptions
+```json
+{
+  "company_number": "13448796"
+}
+```
+
+#### get_uk_establishments
+Get UK establishments of a foreign company
+```json
+{
+  "company_number": "FC123456"
+}
+```
+
+### Search Tools
+
+#### advanced_company_search
+Advanced search with multiple filters
+```json
+{
+  "company_name": "Tech",
+  "company_status": "active",
+  "incorporated_from": "2020-01-01",
+  "incorporated_to": "2024-12-31",
+  "items_per_page": 20
+}
+```
+
+#### search_all
+Search across all resource types
+```json
+{
+  "query": "technology",
+  "items_per_page": 20
+}
+```
+
+#### search_officers
+Search for company officers
+```json
+{
+  "query": "John Smith",
+  "items_per_page": 20
+}
+```
+
+#### search_disqualified_officers
+Search for disqualified officers
+```json
+{
+  "query": "Smith",
+  "items_per_page": 20
+}
+```
+
+#### alphabetical_search
+Search companies alphabetically
+```json
+{
+  "query": "AAA",
+  "items_per_page": 20
+}
+```
+
+#### dissolved_search
+Search dissolved companies
+```json
+{
+  "query": "Old Company",
+  "items_per_page": 20
+}
+```
+
+### Officers Tools
+
+#### get_officers
+Get list of company officers
 ```json
 {
   "company_number": "13448796",
-  "register_type": "directors"
+  "register_type": "directors",
+  "items_per_page": 35
 }
 ```
 
-### get_filing_history
-**Tool:** `get_filing_history`  
-**API Endpoint:** `GET /company/{company_number}/filing-history`  
-**Documentation:** [Filing History API](https://developer.company-information.service.gov.uk/api/docs/company/company_number/filing-history/getFilingHistoryList.html)
-
-Example queries:
-- "Show recent filings for company 13448796"
-- "What accounts has this company filed?"
-- "Get the annual returns history"
-
+#### get_officer_appointment
+Get specific officer appointment details
 ```json
 {
   "company_number": "13448796",
-  "category": "accounts"
+  "appointment_id": "AbCdEfGh"
 }
 ```
 
-### get_persons_with_significant_control
-**Tool:** `get_persons_with_significant_control`  
-**API Endpoint:** `GET /company/{company_number}/persons-with-significant-control`  
-**Documentation:** [PSC API](https://developer.company-information.service.gov.uk/api/docs/company/company_number/persons-with-significant-control/listPersonsWithSignificantControl.html)
-
-Example queries:
-- "Who owns more than 25% of company 13448796?"
-- "Show beneficial owners"
-- "List persons with significant control"
-
+#### get_officer_appointments_list
+Get all appointments for an officer
 ```json
 {
-  "company_number": "13448796"
+  "officer_id": "OFFICER123",
+  "items_per_page": 35
 }
 ```
 
-### get_charges
-**Tool:** `get_charges`  
-**API Endpoint:** `GET /company/{company_number}/charges`  
-**Documentation:** [Charges API](https://developer.company-information.service.gov.uk/api/docs/company/company_number/charges/getChargeList.html)
-
-Example queries:
-- "Does company 13448796 have any mortgages?"
-- "Show registered charges"
-- "List all debentures for this company"
-
+#### get_corporate_officer_disqualification
+Get corporate officer disqualification details
 ```json
 {
-  "company_number": "13448796"
+  "officer_id": "CORP123"
 }
+```
+
+#### get_natural_officer_disqualification
+Get natural person disqualification details
+```json
+{
+  "officer_id": "PERSON123"
+}
+```
+
+### Filing History Tools
+
+#### get_filing_history
+Get company filing history
+```json
+{
+  "company_number": "13448796",
+  "category": "accounts",
+  "items_per_page": 25
+}
+```
+
+#### get_filing_history_item
+Get specific filing details
+```json
+{
+  "company_number": "13448796",
+  "transaction_id": "MzM4NTY3"
+}
+```
+
+### Charges Tools
+
+#### get_charges
+Get list of company charges
+```json
+{
+  "company_number": "13448796",
+  "items_per_page": 25
+}
+```
+
+#### get_charge_details
+Get specific charge details
+```json
+{
+  "company_number": "13448796",
+  "charge_id": "CHARGE123"
+}
+```
+
+### Persons with Significant Control Tools
+
+#### get_persons_with_significant_control
+Get list of PSCs
+```json
+{
+  "company_number": "13448796",
+  "items_per_page": 25
+}
+```
+
+#### get_psc_individual
+Get individual PSC details
+```json
+{
+  "company_number": "13448796",
+  "psc_id": "PSC123"
+}
+```
+
+#### get_psc_corporate_entity
+Get corporate entity PSC details
+```json
+{
+  "company_number": "13448796",
+  "psc_id": "CORP-PSC123"
+}
+```
+
+#### get_psc_legal_person
+Get legal person PSC details
+```json
+{
+  "company_number": "13448796",
+  "psc_id": "LEGAL-PSC123"
+}
+```
+
+#### get_psc_statements_list
+Get PSC statements
+```json
+{
+  "company_number": "13448796",
+  "items_per_page": 25
+}
+```
+
+#### get_psc_statement
+Get specific PSC statement
+```json
+{
+  "company_number": "13448796",
+  "statement_id": "STMT123"
+}
+```
+
+Additional PSC tools available:
+- `get_psc_individual_beneficial_owner`
+- `get_psc_individual_verification`
+- `get_psc_individual_full_record`
+- `get_psc_corporate_entity_beneficial_owner`
+- `get_psc_legal_person_beneficial_owner`
+- `get_psc_super_secure`
+- `get_psc_super_secure_beneficial_owner`
+
+## Architecture
+
+The codebase follows a modular architecture for maintainability and scalability:
+
+```
+src/
+├── api/                 # API client modules
+│   ├── base-client.ts   # Base HTTP client with auth
+│   ├── company-api.ts   # Company endpoints
+│   ├── search-api.ts    # Search endpoints
+│   ├── officers-api.ts  # Officers endpoints
+│   ├── filing-api.ts    # Filing history endpoints
+│   ├── charges-api.ts   # Charges endpoints
+│   ├── psc-api.ts       # PSC endpoints
+│   └── client.ts        # Main API client aggregator
+├── handlers/            # MCP request handlers
+│   ├── company-handlers.ts
+│   ├── search-handlers.ts
+│   ├── officers-handlers.ts
+│   ├── filing-handlers.ts
+│   ├── charges-handlers.ts
+│   └── psc-handlers.ts
+├── tools/               # Tool definitions
+│   └── tools-definition.ts
+├── types/               # TypeScript types & schemas
+│   ├── company.ts
+│   ├── search.ts
+│   ├── officers.ts
+│   ├── filing.ts
+│   ├── charges.ts
+│   ├── psc.ts
+│   └── index.ts
+└── mcp-server.ts        # Main MCP server
 ```
 
 ## Development
@@ -188,9 +425,21 @@ npm test
 # Type checking
 npm run typecheck
 
+# Linting
+npm run lint
+
 # Build
 npm run build
+
+# Run locally
+npm run dev
 ```
+
+## API Rate Limits
+
+The Companies House API has rate limits:
+- 600 requests per 5 minutes per API key
+- Some endpoints may have additional restrictions
 
 ## License
 
