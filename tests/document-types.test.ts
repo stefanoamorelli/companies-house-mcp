@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { 
-  DocumentMetadataSchema, 
-  DocumentContentSchema, 
-  DocumentMetadataResponseSchema 
+import {
+  DocumentMetadataSchema,
+  DocumentContentSchema,
+  DocumentMetadataResponseSchema
 } from '../src/types/document';
 
 describe('Document Types', () => {

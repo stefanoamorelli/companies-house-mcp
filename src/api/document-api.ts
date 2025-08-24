@@ -1,5 +1,9 @@
 import { BaseApiClient } from './base-client.js';
-import type { DocumentMetadata, DocumentContent, DocumentMetadataResponse } from '../types/document.js';
+import type {
+  DocumentMetadata,
+  DocumentContent,
+  DocumentMetadataResponse
+} from '../types/document.js';
 
 export class DocumentApiClient extends BaseApiClient {
   async getDocumentMetadata(params: DocumentMetadata): Promise<DocumentMetadataResponse> {

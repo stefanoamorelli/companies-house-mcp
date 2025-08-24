@@ -53,7 +53,9 @@ describe('DocumentApiClient', () => {
       const error = new Error('API Error');
       (mockAxiosInstance.get as ReturnType<typeof vi.fn>).mockRejectedValue(error);
 
-      await expect(apiClient.getDocumentMetadata({ document_id: 'doc123' })).rejects.toThrow('API Error');
+      await expect(apiClient.getDocumentMetadata({ document_id: 'doc123' })).rejects.toThrow(
+        'API Error'
+      );
     });
   });
 
@@ -82,7 +84,9 @@ describe('DocumentApiClient', () => {
       const error = new Error('Failed to fetch document');
       (mockAxiosInstance.get as ReturnType<typeof vi.fn>).mockRejectedValue(error);
 
-      await expect(apiClient.getDocumentContent({ document_id: 'doc123' })).rejects.toThrow('Failed to fetch document');
+      await expect(apiClient.getDocumentContent({ document_id: 'doc123' })).rejects.toThrow(
+        'Failed to fetch document'
+      );
     });
   });
 });

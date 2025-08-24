@@ -19,16 +19,22 @@ export const DocumentMetadataResponseSchema = z.object({
   created_at: z.string().optional(),
   updated_at: z.string().optional(),
   etag: z.string().optional(),
-  links: z.object({
-    self: z.string().optional(),
-    document: z.string().optional()
-  }).optional(),
-  resources: z.record(z.object({
-    content_length: z.number().optional(),
-    content_type: z.string().optional(),
-    created_at: z.string().optional(),
-    updated_at: z.string().optional()
-  })).optional()
+  links: z
+    .object({
+      self: z.string().optional(),
+      document: z.string().optional()
+    })
+    .optional(),
+  resources: z
+    .record(
+      z.object({
+        content_length: z.number().optional(),
+        content_type: z.string().optional(),
+        created_at: z.string().optional(),
+        updated_at: z.string().optional()
+      })
+    )
+    .optional()
 });
 
 export type DocumentMetadata = z.infer<typeof DocumentMetadataSchema>;

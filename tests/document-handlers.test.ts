@@ -33,11 +33,15 @@ describe('DocumentHandlers', () => {
         }
       };
 
-      (mockApiClient.document!.getDocumentMetadata as ReturnType<typeof vi.fn>).mockResolvedValue(mockMetadata);
+      (mockApiClient.document!.getDocumentMetadata as ReturnType<typeof vi.fn>).mockResolvedValue(
+        mockMetadata
+      );
 
       const result = await handlers.handleGetDocumentMetadata({ document_id: 'doc123' });
 
-      expect(mockApiClient.document!.getDocumentMetadata).toHaveBeenCalledWith({ document_id: 'doc123' });
+      expect(mockApiClient.document!.getDocumentMetadata).toHaveBeenCalledWith({
+        document_id: 'doc123'
+      });
       expect(result.content).toHaveLength(1);
       expect(result.content[0].type).toBe('text');
       expect(JSON.parse(result.content[0].text)).toEqual(mockMetadata);
@@ -50,23 +54,33 @@ describe('DocumentHandlers', () => {
 
     it('should handle API errors', async () => {
       const error = new Error('Document not found');
-      (mockApiClient.document!.getDocumentMetadata as ReturnType<typeof vi.fn>).mockRejectedValue(error);
+      (mockApiClient.document!.getDocumentMetadata as ReturnType<typeof vi.fn>).mockRejectedValue(
+        error
+      );
 
-      await expect(handlers.handleGetDocumentMetadata({ document_id: 'invalid' })).rejects.toThrow('Document not found');
+      await expect(handlers.handleGetDocumentMetadata({ document_id: 'invalid' })).rejects.toThrow(
+        'Document not found'
+      );
     });
   });
 
   describe('handleGetDocumentContent', () => {
     it('should handle valid document content request', async () => {
       const mockBuffer = Buffer.from('PDF content', 'utf-8');
-      (mockApiClient.document!.getDocumentContent as ReturnType<typeof vi.fn>).mockResolvedValue(mockBuffer);
+      (mockApiClient.document!.getDocumentContent as ReturnType<typeof vi.fn>).mockResolvedValue(
+        mockBuffer
+      );
 
       const result = await handlers.handleGetDocumentContent({ document_id: 'doc123' });
 
-      expect(mockApiClient.document!.getDocumentContent).toHaveBeenCalledWith({ document_id: 'doc123' });
+      expect(mockApiClient.document!.getDocumentContent).toHaveBeenCalledWith({
+        document_id: 'doc123'
+      });
       expect(result.content).toHaveLength(1);
       expect(result.content[0].type).toBe('text');
-      expect(result.content[0].text).toBe('Document content retrieved (11 bytes). Content is binary PDF data.');
+      expect(result.content[0].text).toBe(
+        'Document content retrieved (11 bytes). Content is binary PDF data.'
+      );
     });
 
     it('should handle invalid parameters', async () => {
@@ -76,18 +90,26 @@ describe('DocumentHandlers', () => {
 
     it('should handle API errors', async () => {
       const error = new Error('Failed to retrieve document');
-      (mockApiClient.document!.getDocumentContent as ReturnType<typeof vi.fn>).mockRejectedValue(error);
+      (mockApiClient.document!.getDocumentContent as ReturnType<typeof vi.fn>).mockRejectedValue(
+        error
+      );
 
-      await expect(handlers.handleGetDocumentContent({ document_id: 'invalid' })).rejects.toThrow('Failed to retrieve document');
+      await expect(handlers.handleGetDocumentContent({ document_id: 'invalid' })).rejects.toThrow(
+        'Failed to retrieve document'
+      );
     });
 
     it('should handle large documents', async () => {
       const largeBuffer = Buffer.alloc(1024 * 1024); // 1MB
-      (mockApiClient.document!.getDocumentContent as ReturnType<typeof vi.fn>).mockResolvedValue(largeBuffer);
+      (mockApiClient.document!.getDocumentContent as ReturnType<typeof vi.fn>).mockResolvedValue(
+        largeBuffer
+      );
 
       const result = await handlers.handleGetDocumentContent({ document_id: 'large-doc' });
 
-      expect(result.content[0].text).toBe('Document content retrieved (1048576 bytes). Content is binary PDF data.');
+      expect(result.content[0].text).toBe(
+        'Document content retrieved (1048576 bytes). Content is binary PDF data.'
+      );
     });
   });
 });
