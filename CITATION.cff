@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this software in your research or work, please cite it as follows."
+authors:
+  - family-names: Amorelli
+    given-names: Stefano
+    orcid: "https://orcid.org/0009-0004-4917-0999"
+title: "Companies House MCP (Model Context Protocol) Server"
+version: 2.0.0
+date-released: 2025-08-24
+url: https://github.com/stefanoamorelli/companies-house-mcp
+abstract: "A Model Context Protocol (MCP) server that provides access to UK company data through the Companies House API. Supports 45+ endpoints including company profiles, officer information, filing history, charges, and persons with significant control (PSC)."
+keywords:
+  - companies-house
+  - mcp
+  - model-context-protocol
+  - uk-companies
+  - api
+  - typescript
+license: AGPL-3.0
+repository-code: https://github.com/stefanoamorelli/companies-house-mcp
