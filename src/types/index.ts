@@ -6,3 +6,4 @@ export * from './charges.js';
 export * from './psc.js';
 export * from './psc-response.js';
 export * from './search-response.js';
+export * from './document.js';

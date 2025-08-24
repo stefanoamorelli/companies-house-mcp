@@ -5,6 +5,7 @@ import { OfficersApiClient } from './officers-api.js';
 import { FilingApiClient } from './filing-api.js';
 import { ChargesApiClient } from './charges-api.js';
 import { PSCApiClient } from './psc-api.js';
+import { DocumentApiClient } from './document-api.js';
 
 export class CompaniesHouseApiClient {
   public company: CompanyApiClient;
@@ -13,6 +14,7 @@ export class CompaniesHouseApiClient {
   public filing: FilingApiClient;
   public charges: ChargesApiClient;
   public psc: PSCApiClient;
+  public document: DocumentApiClient;
 
   constructor(config: ApiConfig) {
     this.company = new CompanyApiClient(config);
@@ -21,6 +23,7 @@ export class CompaniesHouseApiClient {
     this.filing = new FilingApiClient(config);
     this.charges = new ChargesApiClient(config);
     this.psc = new PSCApiClient(config);
+    this.document = new DocumentApiClient(config);
   }
 
   async testConnection(): Promise<boolean> {

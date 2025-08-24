@@ -755,6 +755,39 @@ export function getPSCTools(): Tool[] {
   ];
 }
 
+export function getDocumentTools(): Tool[] {
+  return [
+    {
+      name: 'get_document_metadata',
+      description: "Fetch a document's metadata",
+      inputSchema: {
+        type: 'object',
+        properties: {
+          document_id: {
+            type: 'string',
+            description: 'The document ID'
+          }
+        },
+        required: ['document_id']
+      }
+    },
+    {
+      name: 'get_document_content',
+      description: 'Fetch a document content (PDF)',
+      inputSchema: {
+        type: 'object',
+        properties: {
+          document_id: {
+            type: 'string',
+            description: 'The document ID'
+          }
+        },
+        required: ['document_id']
+      }
+    }
+  ];
+}
+
 export function getAllTools(): Tool[] {
   return [
     ...getCompanyTools(),
@@ -762,6 +795,7 @@ export function getAllTools(): Tool[] {
     ...getOfficersTools(),
     ...getFilingTools(),
     ...getChargesTools(),
-    ...getPSCTools()
+    ...getPSCTools(),
+    ...getDocumentTools()
   ];
 }

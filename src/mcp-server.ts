@@ -9,6 +9,7 @@ import { OfficersHandlers } from './handlers/officers-handlers.js';
 import { FilingHandlers } from './handlers/filing-handlers.js';
 import { ChargesHandlers } from './handlers/charges-handlers.js';
 import { PSCHandlers } from './handlers/psc-handlers.js';
+import { DocumentHandlers } from './handlers/document-handlers.js';
 
 export interface ServerConfig {
   apiKey: string;
@@ -24,6 +25,7 @@ export class CompaniesHouseMCPServer {
   private filingHandlers: FilingHandlers;
   private chargesHandlers: ChargesHandlers;
   private pscHandlers: PSCHandlers;
+  private documentHandlers: DocumentHandlers;
 
   constructor(config: ServerConfig) {
     this.server = new Server(
@@ -50,6 +52,7 @@ export class CompaniesHouseMCPServer {
     this.filingHandlers = new FilingHandlers(this.apiClient);
     this.chargesHandlers = new ChargesHandlers(this.apiClient);
     this.pscHandlers = new PSCHandlers(this.apiClient);
+    this.documentHandlers = new DocumentHandlers(this.apiClient);
 
     this.setupHandlers();
   }
@@ -145,6 +148,12 @@ export class CompaniesHouseMCPServer {
             return await this.pscHandlers.handleGetPSCSuperSecureBeneficialOwner(args);
           case 'get_psc_super_secure':
             return await this.pscHandlers.handleGetPSCSuperSecure(args);
+
+          // Document endpoints
+          case 'get_document_metadata':
+            return await this.documentHandlers.handleGetDocumentMetadata(args);
+          case 'get_document_content':
+            return await this.documentHandlers.handleGetDocumentContent(args);
 
           default:
             throw new Error(`Unknown tool: ${name}`);
