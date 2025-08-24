@@ -10,8 +10,3 @@ coverage/
 *.swp
 *.swo
 *~
-
-# Test files with API keys - DO NOT COMMIT
-test-auth.ts
-test-endpoints.ts
-test-*.ts
