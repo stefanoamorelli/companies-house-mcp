@@ -55,9 +55,7 @@ export class CompanyApiClient extends BaseApiClient {
   }
 
   async getUKEstablishments(params: { company_number: string }): Promise<UKEstablishments> {
-    const response = await this.client.get(
-      `/company/${params.company_number}/uk-establishments`
-    );
+    const response = await this.client.get(`/company/${params.company_number}/uk-establishments`);
     return response.data;
   }
 }

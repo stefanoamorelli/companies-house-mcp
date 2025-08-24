@@ -74,7 +74,9 @@ export const PSCSuperSecureSchema = z.object({
 });
 
 export type PersonsWithSignificantControl = z.infer<typeof PersonsWithSignificantControlSchema>;
-export type PSCCorporateEntityBeneficialOwner = z.infer<typeof PSCCorporateEntityBeneficialOwnerSchema>;
+export type PSCCorporateEntityBeneficialOwner = z.infer<
+  typeof PSCCorporateEntityBeneficialOwnerSchema
+>;
 export type PSCCorporateEntity = z.infer<typeof PSCCorporateEntitySchema>;
 export type PSCIndividualBeneficialOwner = z.infer<typeof PSCIndividualBeneficialOwnerSchema>;
 export type PSCIndividual = z.infer<typeof PSCIndividualSchema>;

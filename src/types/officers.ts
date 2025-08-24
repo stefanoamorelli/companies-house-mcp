@@ -37,6 +37,8 @@ export const OfficerAppointmentsListSchema = z.object({
 
 export type Officers = z.infer<typeof OfficersSchema>;
 export type OfficerAppointment = z.infer<typeof OfficerAppointmentSchema>;
-export type CorporateOfficerDisqualification = z.infer<typeof CorporateOfficerDisqualificationSchema>;
+export type CorporateOfficerDisqualification = z.infer<
+  typeof CorporateOfficerDisqualificationSchema
+>;
 export type NaturalOfficerDisqualification = z.infer<typeof NaturalOfficerDisqualificationSchema>;
 export type OfficerAppointmentsList = z.infer<typeof OfficerAppointmentsListSchema>;

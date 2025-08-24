@@ -1,27 +1,39 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { CompaniesHouseMCPServer } from '../src/mcp-server';
-import { CompaniesHouseApiClient } from '../src/api-client';
 
-vi.mock('../src/api-client');
+vi.mock('../src/api/client');
+
+import { CompaniesHouseApiClient } from '../src/api/client';
 
 describe('CompaniesHouseMCPServer', () => {
   let server: CompaniesHouseMCPServer;
-  let mockApiClient: Partial<CompaniesHouseApiClient>;
+  let mockApiClient: any;
 
   beforeEach(() => {
     mockApiClient = {
-      searchCompanies: vi.fn(),
-      getCompanyProfile: vi.fn(),
-      getOfficers: vi.fn(),
-      getFilingHistory: vi.fn(),
-      getPersonsWithSignificantControl: vi.fn(),
-      getCharges: vi.fn(),
+      company: {
+        searchCompanies: vi.fn(),
+        getCompanyProfile: vi.fn()
+      },
+      search: {
+        searchCompanies: vi.fn()
+      },
+      officers: {
+        getOfficers: vi.fn()
+      },
+      filing: {
+        getFilingHistory: vi.fn()
+      },
+      charges: {
+        getCharges: vi.fn()
+      },
+      psc: {
+        getPersonsWithSignificantControl: vi.fn()
+      },
       testConnection: vi.fn()
     };
 
-    (CompaniesHouseApiClient as unknown as ReturnType<typeof vi.fn>).mockImplementation(
-      () => mockApiClient
-    );
+    vi.mocked(CompaniesHouseApiClient).mockImplementation(() => mockApiClient as any);
 
     server = new CompaniesHouseMCPServer({
       apiKey: 'test-api-key',
@@ -54,7 +66,7 @@ describe('CompaniesHouseMCPServer', () => {
         switch (name) {
           case 'search_companies': {
             const searchParams = args;
-            const searchResult = await mockApiClient.searchCompanies(searchParams);
+            const searchResult = await mockApiClient.company.searchCompanies(searchParams);
             return {
               content: [
                 {
@@ -66,7 +78,7 @@ describe('CompaniesHouseMCPServer', () => {
           }
           case 'get_company_profile': {
             const profileParams = args;
-            const profileResult = await mockApiClient.getCompanyProfile(profileParams);
+            const profileResult = await mockApiClient.company.getCompanyProfile(profileParams);
             return {
               content: [
                 {
@@ -78,7 +90,7 @@ describe('CompaniesHouseMCPServer', () => {
           }
           case 'get_officers': {
             const officersParams = args;
-            const officersResult = await mockApiClient.getOfficers(officersParams);
+            const officersResult = await mockApiClient.officers.getOfficers(officersParams);
             return {
               content: [
                 {
@@ -90,7 +102,7 @@ describe('CompaniesHouseMCPServer', () => {
           }
           case 'get_filing_history': {
             const filingParams = args;
-            const filingResult = await mockApiClient.getFilingHistory(filingParams);
+            const filingResult = await mockApiClient.filing.getFilingHistory(filingParams);
             return {
               content: [
                 {
@@ -102,7 +114,7 @@ describe('CompaniesHouseMCPServer', () => {
           }
           case 'get_persons_with_significant_control': {
             const pscParams = args;
-            const pscResult = await mockApiClient.getPersonsWithSignificantControl(pscParams);
+            const pscResult = await mockApiClient.psc.getPersonsWithSignificantControl(pscParams);
             return {
               content: [
                 {
@@ -114,7 +126,7 @@ describe('CompaniesHouseMCPServer', () => {
           }
           case 'get_charges': {
             const chargesParams = args;
-            const chargesResult = await mockApiClient.getCharges(chargesParams);
+            const chargesResult = await mockApiClient.charges.getCharges(chargesParams);
             return {
               content: [
                 {
@@ -146,7 +158,7 @@ describe('CompaniesHouseMCPServer', () => {
           items: [{ company_name: 'Test Corp' }],
           total_results: 1
         };
-        mockApiClient.searchCompanies.mockResolvedValue(mockResult);
+        mockApiClient.company.searchCompanies.mockResolvedValue(mockResult);
 
         const request = {
           params: {
@@ -161,12 +173,12 @@ describe('CompaniesHouseMCPServer', () => {
 
         const result = await callToolHandler(request);
 
-        expect(mockApiClient.searchCompanies).toHaveBeenCalled();
+        expect(mockApiClient.company.searchCompanies).toHaveBeenCalled();
         expect(result.content[0].text).toContain(JSON.stringify(mockResult, null, 2));
       });
 
       it('should handle search with minimal parameters', async () => {
-        mockApiClient.searchCompanies.mockResolvedValue({ items: [] });
+        mockApiClient.company.searchCompanies.mockResolvedValue({ items: [] });
 
         const request = {
           params: {
@@ -177,13 +189,13 @@ describe('CompaniesHouseMCPServer', () => {
 
         await callToolHandler(request);
 
-        expect(mockApiClient.searchCompanies).toHaveBeenCalled();
+        expect(mockApiClient.company.searchCompanies).toHaveBeenCalled();
       });
 
       it('should handle validation errors', async () => {
         // Since we're testing validation, the mock won't be called
         // Instead let's test that missing query field causes an error
-        mockApiClient.searchCompanies.mockRejectedValue(new Error('query is required'));
+        mockApiClient.company.searchCompanies.mockRejectedValue(new Error('query is required'));
 
         const request = {
           params: {
@@ -208,7 +220,7 @@ describe('CompaniesHouseMCPServer', () => {
           company_number: '12345678',
           jurisdiction: 'england-wales'
         };
-        mockApiClient.getCompanyProfile.mockResolvedValue(mockProfile);
+        mockApiClient.company.getCompanyProfile.mockResolvedValue(mockProfile);
 
         const request = {
           params: {
@@ -219,7 +231,7 @@ describe('CompaniesHouseMCPServer', () => {
 
         const result = await callToolHandler(request);
 
-        expect(mockApiClient.getCompanyProfile).toHaveBeenCalled();
+        expect(mockApiClient.company.getCompanyProfile).toHaveBeenCalled();
         expect(result.content[0].text).toContain(JSON.stringify(mockProfile, null, 2));
       });
     });
@@ -229,7 +241,7 @@ describe('CompaniesHouseMCPServer', () => {
         const mockOfficers = {
           items: [{ name: 'John Doe', officer_role: 'director' }]
         };
-        mockApiClient.getOfficers.mockResolvedValue(mockOfficers);
+        mockApiClient.officers.getOfficers.mockResolvedValue(mockOfficers);
 
         const request = {
           params: {
@@ -245,7 +257,7 @@ describe('CompaniesHouseMCPServer', () => {
 
         const result = await callToolHandler(request);
 
-        expect(mockApiClient.getOfficers).toHaveBeenCalled();
+        expect(mockApiClient.officers.getOfficers).toHaveBeenCalled();
         expect(result.content[0].text).toContain(JSON.stringify(mockOfficers, null, 2));
       });
     });
@@ -255,7 +267,7 @@ describe('CompaniesHouseMCPServer', () => {
         const mockFilingHistory = {
           items: [{ type: 'AA', date: '2024-01-01' }]
         };
-        mockApiClient.getFilingHistory.mockResolvedValue(mockFilingHistory);
+        mockApiClient.filing.getFilingHistory.mockResolvedValue(mockFilingHistory);
 
         const request = {
           params: {
@@ -269,7 +281,7 @@ describe('CompaniesHouseMCPServer', () => {
 
         const result = await callToolHandler(request);
 
-        expect(mockApiClient.getFilingHistory).toHaveBeenCalled();
+        expect(mockApiClient.filing.getFilingHistory).toHaveBeenCalled();
         expect(result.content[0].text).toContain(JSON.stringify(mockFilingHistory, null, 2));
       });
     });
@@ -279,7 +291,7 @@ describe('CompaniesHouseMCPServer', () => {
         const mockPSC = {
           items: [{ name: 'Jane Smith', kind: 'individual-person-with-significant-control' }]
         };
-        mockApiClient.getPersonsWithSignificantControl.mockResolvedValue(mockPSC);
+        mockApiClient.psc.getPersonsWithSignificantControl.mockResolvedValue(mockPSC);
 
         const request = {
           params: {
@@ -290,7 +302,7 @@ describe('CompaniesHouseMCPServer', () => {
 
         const result = await callToolHandler(request);
 
-        expect(mockApiClient.getPersonsWithSignificantControl).toHaveBeenCalled();
+        expect(mockApiClient.psc.getPersonsWithSignificantControl).toHaveBeenCalled();
         expect(result.content[0].text).toContain(JSON.stringify(mockPSC, null, 2));
       });
     });
@@ -300,7 +312,7 @@ describe('CompaniesHouseMCPServer', () => {
         const mockCharges = {
           items: [{ charge_number: 1, status: 'outstanding' }]
         };
-        mockApiClient.getCharges.mockResolvedValue(mockCharges);
+        mockApiClient.charges.getCharges.mockResolvedValue(mockCharges);
 
         const request = {
           params: {
@@ -314,7 +326,7 @@ describe('CompaniesHouseMCPServer', () => {
 
         const result = await callToolHandler(request);
 
-        expect(mockApiClient.getCharges).toHaveBeenCalled();
+        expect(mockApiClient.charges.getCharges).toHaveBeenCalled();
         expect(result.content[0].text).toContain(JSON.stringify(mockCharges, null, 2));
       });
     });
@@ -334,7 +346,7 @@ describe('CompaniesHouseMCPServer', () => {
       });
 
       it('should handle API client errors', async () => {
-        mockApiClient.searchCompanies.mockRejectedValue(new Error('API Error'));
+        mockApiClient.company.searchCompanies.mockRejectedValue(new Error('API Error'));
 
         const request = {
           params: {
@@ -349,7 +361,7 @@ describe('CompaniesHouseMCPServer', () => {
       });
 
       it('should handle non-Error exceptions', async () => {
-        mockApiClient.searchCompanies.mockRejectedValue('String error');
+        mockApiClient.company.searchCompanies.mockRejectedValue('String error');
 
         const request = {
           params: {

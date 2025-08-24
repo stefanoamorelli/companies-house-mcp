@@ -34,16 +34,12 @@ export class OfficersApiClient extends BaseApiClient {
   async getCorporateOfficerDisqualification(
     params: CorporateOfficerDisqualification
   ): Promise<any> {
-    const response = await this.client.get(
-      `/disqualified-officers/corporate/${params.officer_id}`
-    );
+    const response = await this.client.get(`/disqualified-officers/corporate/${params.officer_id}`);
     return response.data;
   }
 
   async getNaturalOfficerDisqualification(params: NaturalOfficerDisqualification): Promise<any> {
-    const response = await this.client.get(
-      `/disqualified-officers/natural/${params.officer_id}`
-    );
+    const response = await this.client.get(`/disqualified-officers/natural/${params.officer_id}`);
     return response.data;
   }
 
