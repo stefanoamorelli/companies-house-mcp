@@ -40,10 +40,12 @@ export const PSCIndividualRecordSchema = z.object({
   date_of_birth: DateOfBirthSchema.optional(),
   etag: z.string().optional(),
   kind: z.string().optional(),
-  links: z.object({
-    self: z.string(),
-    statement: z.string().optional()
-  }).optional(),
+  links: z
+    .object({
+      self: z.string(),
+      statement: z.string().optional()
+    })
+    .optional(),
   name: z.string().optional(),
   name_elements: NameElementsSchema.optional(),
   nationality: z.string().optional(),
@@ -57,10 +59,12 @@ export const PSCCorporateEntityRecordSchema = z.object({
   etag: z.string().optional(),
   identification: IdentificationSchema.optional(),
   kind: z.string().optional(),
-  links: z.object({
-    self: z.string(),
-    statement: z.string().optional()
-  }).optional(),
+  links: z
+    .object({
+      self: z.string(),
+      statement: z.string().optional()
+    })
+    .optional(),
   name: z.string().optional(),
   natures_of_control: z.array(z.string()).optional(),
   notified_on: z.string().optional()
@@ -72,10 +76,12 @@ export const PSCLegalPersonRecordSchema = z.object({
   etag: z.string().optional(),
   identification: IdentificationSchema.optional(),
   kind: z.string().optional(),
-  links: z.object({
-    self: z.string(),
-    statement: z.string().optional()
-  }).optional(),
+  links: z
+    .object({
+      self: z.string(),
+      statement: z.string().optional()
+    })
+    .optional(),
   name: z.string().optional(),
   natures_of_control: z.array(z.string()).optional(),
   notified_on: z.string().optional()
@@ -85,10 +91,12 @@ export const PSCStatementRecordSchema = z.object({
   ceased_on: z.string().optional(),
   etag: z.string().optional(),
   kind: z.string().optional(),
-  links: z.object({
-    self: z.string(),
-    person_with_significant_control: z.string().optional()
-  }).optional(),
+  links: z
+    .object({
+      self: z.string(),
+      person_with_significant_control: z.string().optional()
+    })
+    .optional(),
   notified_on: z.string().optional(),
   statement: z.string().optional()
 });
@@ -98,34 +106,44 @@ export const PSCSuperSecureRecordSchema = z.object({
   description: z.string().optional(),
   etag: z.string().optional(),
   kind: z.string().optional(),
-  links: z.object({
-    self: z.string()
-  }).optional()
+  links: z
+    .object({
+      self: z.string()
+    })
+    .optional()
 });
 
 export const PSCVerificationDetailsSchema = z.object({
   name_elements: NameElementsSchema.optional(),
-  verification_details: z.object({
-    name_mismatch_reason: z.string().optional(),
-    verification_status: z.string().optional()
-  }).optional()
+  verification_details: z
+    .object({
+      name_mismatch_reason: z.string().optional(),
+      verification_status: z.string().optional()
+    })
+    .optional()
 });
 
 export const PSCListResponseSchema = z.object({
   active_count: z.number().optional(),
   ceased_count: z.number().optional(),
-  items: z.array(z.union([
-    PSCIndividualRecordSchema,
-    PSCCorporateEntityRecordSchema,
-    PSCLegalPersonRecordSchema,
-    PSCStatementRecordSchema,
-    PSCSuperSecureRecordSchema
-  ])).optional(),
+  items: z
+    .array(
+      z.union([
+        PSCIndividualRecordSchema,
+        PSCCorporateEntityRecordSchema,
+        PSCLegalPersonRecordSchema,
+        PSCStatementRecordSchema,
+        PSCSuperSecureRecordSchema
+      ])
+    )
+    .optional(),
   items_per_page: z.number().optional(),
-  links: z.object({
-    self: z.string(),
-    persons_with_significant_control_statements: z.string().optional()
-  }).optional(),
+  links: z
+    .object({
+      self: z.string(),
+      persons_with_significant_control_statements: z.string().optional()
+    })
+    .optional(),
   start_index: z.number().optional(),
   total_results: z.number().optional()
 });
@@ -135,10 +153,12 @@ export const PSCStatementsListResponseSchema = z.object({
   ceased_count: z.number().optional(),
   items: z.array(PSCStatementRecordSchema).optional(),
   items_per_page: z.number().optional(),
-  links: z.object({
-    self: z.string(),
-    persons_with_significant_control: z.string().optional()
-  }).optional(),
+  links: z
+    .object({
+      self: z.string(),
+      persons_with_significant_control: z.string().optional()
+    })
+    .optional(),
   start_index: z.number().optional(),
   total_results: z.number().optional()
 });

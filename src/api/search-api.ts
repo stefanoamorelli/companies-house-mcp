@@ -56,7 +56,9 @@ export class SearchApiClient extends BaseApiClient {
     return response.data;
   }
 
-  async searchDisqualifiedOfficers(params: SearchDisqualifiedOfficers): Promise<DisqualifiedOfficerSearchResponse> {
+  async searchDisqualifiedOfficers(
+    params: SearchDisqualifiedOfficers
+  ): Promise<DisqualifiedOfficerSearchResponse> {
     const response = await this.client.get('/search/disqualified-officers', {
       params: {
         q: params.query,

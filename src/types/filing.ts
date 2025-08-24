@@ -24,10 +24,12 @@ export const FilingItemSchema = z.object({
   date: z.string().optional(),
   description: z.string().optional(),
   description_values: z.record(z.string()).optional(),
-  links: z.object({
-    self: z.string().optional(),
-    document_metadata: z.string().optional()
-  }).optional(),
+  links: z
+    .object({
+      self: z.string().optional(),
+      document_metadata: z.string().optional()
+    })
+    .optional(),
   pages: z.number().optional(),
   paper_filed: z.boolean().optional(),
   transaction_id: z.string().optional(),

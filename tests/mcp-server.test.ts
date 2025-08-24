@@ -56,7 +56,9 @@ describe('CompaniesHouseMCPServer', () => {
       testConnection: vi.fn()
     };
 
-    vi.mocked(CompaniesHouseApiClient).mockImplementation(() => mockApiClient as unknown as CompaniesHouseApiClient);
+    vi.mocked(CompaniesHouseApiClient).mockImplementation(
+      () => mockApiClient as unknown as CompaniesHouseApiClient
+    );
 
     server = new CompaniesHouseMCPServer({
       apiKey: 'test-api-key',

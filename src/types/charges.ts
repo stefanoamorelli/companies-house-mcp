@@ -20,18 +20,22 @@ export const ChargeDetailsSchema = z.object({
 export const ChargeSchema = z.object({
   charge_code: z.string().optional(),
   charge_number: z.number().optional(),
-  classification: z.object({
-    description: z.string(),
-    type: z.string()
-  }).optional(),
+  classification: z
+    .object({
+      description: z.string(),
+      type: z.string()
+    })
+    .optional(),
   created_on: z.string().optional(),
   delivered_on: z.string().optional(),
   status: z.string().optional(),
   etag: z.string().optional(),
   id: z.string().optional(),
-  links: z.object({
-    self: z.string()
-  }).optional()
+  links: z
+    .object({
+      self: z.string()
+    })
+    .optional()
 });
 
 export const ChargesResponseSchema = z.object({

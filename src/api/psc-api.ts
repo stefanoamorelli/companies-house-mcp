@@ -56,7 +56,9 @@ export class PSCApiClient extends BaseApiClient {
     return response.data;
   }
 
-  async getPSCIndividualBeneficialOwner(params: PSCIndividualBeneficialOwner): Promise<PSCIndividualRecord> {
+  async getPSCIndividualBeneficialOwner(
+    params: PSCIndividualBeneficialOwner
+  ): Promise<PSCIndividualRecord> {
     const response = await this.client.get(
       `/company/${params.company_number}/persons-with-significant-control/individual-beneficial-owner/${params.psc_id}`
     );
@@ -70,7 +72,9 @@ export class PSCApiClient extends BaseApiClient {
     return response.data;
   }
 
-  async getPSCIndividualVerification(params: PSCIndividualVerification): Promise<PSCVerificationDetails> {
+  async getPSCIndividualVerification(
+    params: PSCIndividualVerification
+  ): Promise<PSCVerificationDetails> {
     const response = await this.client.get(
       `/company/${params.company_number}/persons-with-significant-control/individual/${params.psc_id}/verification-state`
     );
@@ -84,7 +88,9 @@ export class PSCApiClient extends BaseApiClient {
     return response.data;
   }
 
-  async getPSCLegalPersonBeneficialOwner(params: PSCLegalPersonBeneficialOwner): Promise<PSCLegalPersonRecord> {
+  async getPSCLegalPersonBeneficialOwner(
+    params: PSCLegalPersonBeneficialOwner
+  ): Promise<PSCLegalPersonRecord> {
     const response = await this.client.get(
       `/company/${params.company_number}/persons-with-significant-control/legal-person-beneficial-owner/${params.psc_id}`
     );
@@ -118,7 +124,9 @@ export class PSCApiClient extends BaseApiClient {
     return response.data;
   }
 
-  async getPSCSuperSecureBeneficialOwner(params: PSCSuperSecureBeneficialOwner): Promise<PSCSuperSecureRecord> {
+  async getPSCSuperSecureBeneficialOwner(
+    params: PSCSuperSecureBeneficialOwner
+  ): Promise<PSCSuperSecureRecord> {
     const response = await this.client.get(
       `/company/${params.company_number}/persons-with-significant-control/super-secure-beneficial-owner/${params.super_secure_id}`
     );
