@@ -1,6 +1,7 @@
-[![asciicast](https://asciinema.org/a/7UZTjg6W1K0SEsRM7EnvnXi5p.svg)](https://asciinema.org/a/7UZTjg6W1K0SEsRM7EnvnXi5p)
-
 # Companies House MCP Server
+
+![Companies House MCP Server - Demo](https://github.com/user-attachments/assets/652267a6-9378-4edb-92fb-6be1b90122ec)
+
 
 Access UK company data through the [Companies House API](https://developer.company-information.service.gov.uk/api/docs/) directly in [MCP clients](https://modelcontextprotocol.io/clients).
 
