@@ -70,7 +70,7 @@ describe('CompaniesHouseApiClient', () => {
       };
       mockAxiosInstance.get.mockResolvedValue(mockResponse);
 
-      const result = await apiClient.searchCompanies({
+      const result = await apiClient.company.searchCompanies({
         query: 'test',
         items_per_page: 10,
         start_index: 0
@@ -90,7 +90,7 @@ describe('CompaniesHouseApiClient', () => {
       const mockResponse = { data: { items: [] } };
       mockAxiosInstance.get.mockResolvedValue(mockResponse);
 
-      await apiClient.searchCompanies({ query: 'test' });
+      await apiClient.company.searchCompanies({ query: 'test' });
 
       expect(mockAxiosInstance.get).toHaveBeenCalledWith('/search/companies', {
         params: {
@@ -113,7 +113,7 @@ describe('CompaniesHouseApiClient', () => {
       };
       mockAxiosInstance.get.mockResolvedValue(mockResponse);
 
-      const result = await apiClient.getCompanyProfile({
+      const result = await apiClient.company.getCompanyProfile({
         company_number: '12345678'
       });
 
@@ -131,7 +131,7 @@ describe('CompaniesHouseApiClient', () => {
       };
       mockAxiosInstance.get.mockResolvedValue(mockResponse);
 
-      const result = await apiClient.getOfficers({
+      const result = await apiClient.officers.getOfficers({
         company_number: '12345678',
         items_per_page: 50,
         start_index: 10,
@@ -152,7 +152,7 @@ describe('CompaniesHouseApiClient', () => {
       const mockResponse = { data: { items: [] } };
       mockAxiosInstance.get.mockResolvedValue(mockResponse);
 
-      await apiClient.getOfficers({ company_number: '12345678' });
+      await apiClient.officers.getOfficers({ company_number: '12345678' });
 
       expect(mockAxiosInstance.get).toHaveBeenCalledWith('/company/12345678/officers', {
         params: {
@@ -173,7 +173,7 @@ describe('CompaniesHouseApiClient', () => {
       };
       mockAxiosInstance.get.mockResolvedValue(mockResponse);
 
-      const result = await apiClient.getFilingHistory({
+      const result = await apiClient.filing.getFilingHistory({
         company_number: '12345678',
         items_per_page: 30,
         start_index: 5,
@@ -200,7 +200,7 @@ describe('CompaniesHouseApiClient', () => {
       };
       mockAxiosInstance.get.mockResolvedValue(mockResponse);
 
-      const result = await apiClient.getPersonsWithSignificantControl({
+      const result = await apiClient.psc.getPersonsWithSignificantControl({
         company_number: '12345678',
         items_per_page: 20
       });
@@ -227,7 +227,7 @@ describe('CompaniesHouseApiClient', () => {
       };
       mockAxiosInstance.get.mockResolvedValue(mockResponse);
 
-      const result = await apiClient.getCharges({
+      const result = await apiClient.charges.getCharges({
         company_number: '12345678'
       });
 
@@ -283,7 +283,7 @@ describe('CompaniesHouseApiClient', () => {
         }
       });
 
-      await expect(apiClient.searchCompanies({ query: 'test' })).rejects.toThrow(
+      await expect(apiClient.company.searchCompanies({ query: 'test' })).rejects.toThrow(
         'Authentication failed: Invalid API key. Please check your API key.'
       );
     });
@@ -306,9 +306,9 @@ describe('CompaniesHouseApiClient', () => {
         }
       });
 
-      await expect(apiClient.getCompanyProfile({ company_number: '99999999' })).rejects.toThrow(
-        'Resource not found: Company not found'
-      );
+      await expect(
+        apiClient.company.getCompanyProfile({ company_number: '99999999' })
+      ).rejects.toThrow('Resource not found: Company not found');
     });
 
     it('should handle 429 rate limit error', async () => {
@@ -329,7 +329,7 @@ describe('CompaniesHouseApiClient', () => {
         }
       });
 
-      await expect(apiClient.searchCompanies({ query: 'test' })).rejects.toThrow(
+      await expect(apiClient.company.searchCompanies({ query: 'test' })).rejects.toThrow(
         'Rate limit exceeded: Too many requests. Please try again later.'
       );
     });
@@ -352,7 +352,7 @@ describe('CompaniesHouseApiClient', () => {
         }
       });
 
-      await expect(apiClient.searchCompanies({ query: 'test' })).rejects.toThrow(
+      await expect(apiClient.company.searchCompanies({ query: 'test' })).rejects.toThrow(
         'Server error: Internal server error. Please try again later.'
       );
     });
@@ -372,7 +372,7 @@ describe('CompaniesHouseApiClient', () => {
         }
       });
 
-      await expect(apiClient.searchCompanies({ query: 'test' })).rejects.toThrow(
+      await expect(apiClient.company.searchCompanies({ query: 'test' })).rejects.toThrow(
         'No response from Companies House API. Please check your connection.'
       );
     });
@@ -388,7 +388,7 @@ describe('CompaniesHouseApiClient', () => {
         }
       });
 
-      await expect(apiClient.searchCompanies({ query: 'test' })).rejects.toThrow(
+      await expect(apiClient.company.searchCompanies({ query: 'test' })).rejects.toThrow(
         'Request error: Unknown error'
       );
     });
