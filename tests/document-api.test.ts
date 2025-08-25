@@ -20,9 +20,7 @@ describe('DocumentApiClient', () => {
 
     (axios.create as ReturnType<typeof vi.fn>).mockReturnValue(mockAxiosInstance as AxiosInstance);
 
-    apiClient = new DocumentApiClient({
-      apiKey: 'test-api-key'
-    });
+    apiClient = new DocumentApiClient('test-api-key');
   });
 
   describe('getDocumentMetadata', () => {
@@ -45,7 +43,11 @@ describe('DocumentApiClient', () => {
 
       const result = await apiClient.getDocumentMetadata({ document_id: 'doc123' });
 
-      expect(mockAxiosInstance.get).toHaveBeenCalledWith('/document/doc123');
+      expect(mockAxiosInstance.get).toHaveBeenCalledWith('/document/doc123', {
+        headers: {
+          Accept: 'application/json'
+        }
+      });
       expect(result).toEqual(mockResponse.data);
     });
 
