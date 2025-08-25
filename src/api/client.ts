@@ -23,7 +23,7 @@ export class CompaniesHouseApiClient {
     this.filing = new FilingApiClient(config);
     this.charges = new ChargesApiClient(config);
     this.psc = new PSCApiClient(config);
-    this.document = new DocumentApiClient(config);
+    this.document = new DocumentApiClient(config.apiKey);
   }
 
   async testConnection(): Promise<boolean> {
