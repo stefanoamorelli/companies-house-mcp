@@ -1,6 +1,6 @@
 {
   "name": "companies-house-mcp-server",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "MCP server for Companies House API integration",
   "main": "dist/index.js",
   "type": "module",
