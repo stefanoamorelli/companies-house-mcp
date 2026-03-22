@@ -200,7 +200,9 @@ export class CompaniesHouseMCPServer {
       });
 
       httpServer.listen(port, () => {
-        console.error(`Companies House MCP Server v${SERVER_VERSION} running on http://localhost:${port}/mcp`);
+        console.error(
+          `Companies House MCP Server v${SERVER_VERSION} running on http://localhost:${port}/mcp`
+        );
         console.error(`Loaded ${toolCount} tools`);
       });
     } else {

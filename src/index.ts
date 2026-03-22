@@ -16,7 +16,8 @@ async function main() {
 
   const args = process.argv.slice(2);
   const transportIdx = args.indexOf('--transport');
-  const transport = transportIdx !== -1 ? (args[transportIdx + 1] as 'stdio' | 'streamable-http') : 'stdio';
+  const transport =
+    transportIdx !== -1 ? (args[transportIdx + 1] as 'stdio' | 'streamable-http') : 'stdio';
   const portIdx = args.indexOf('--port');
   const port = portIdx !== -1 ? parseInt(args[portIdx + 1], 10) : 3000;
 
