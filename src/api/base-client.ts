@@ -26,14 +26,10 @@ export class BaseApiClient {
   constructor(config: ApiConfig) {
     this.apiKey = config.apiKey;
     const baseURL = config.baseUrl || 'https://api.company-information.service.gov.uk';
-    const authHeader =
-      'Basic ' + Buffer.from(this.apiKey + ':').toString('base64');
+    const authHeader = 'Basic ' + Buffer.from(this.apiKey + ':').toString('base64');
 
     this.client = {
-      get: async (
-        path: string,
-        options?: RequestOptions
-      ): Promise<FetchResponse> => {
+      get: async (path: string, options?: RequestOptions): Promise<FetchResponse> => {
         const url = new URL(path, baseURL);
         if (options?.params) {
           for (const [key, value] of Object.entries(options.params)) {
@@ -46,7 +42,7 @@ export class BaseApiClient {
         const headers: Record<string, string> = {
           Accept: 'application/json',
           Authorization: authHeader,
-          ...options?.headers,
+          ...options?.headers
         };
 
         const controller = new AbortController();
@@ -56,7 +52,7 @@ export class BaseApiClient {
           const response = await fetch(url.toString(), {
             method: 'GET',
             headers,
-            signal: controller.signal,
+            signal: controller.signal
           });
 
           if (!response.ok) {
@@ -66,16 +62,17 @@ export class BaseApiClient {
           const data = await response.json();
           return { data, status: response.status };
         } catch (error) {
-          if (error instanceof TypeError && (error.message.includes('fetch') || error.message.includes('network'))) {
-            throw new Error(
-              'No response from Companies House API. Please check your connection.'
-            );
+          if (
+            error instanceof TypeError &&
+            (error.message.includes('fetch') || error.message.includes('network'))
+          ) {
+            throw new Error('No response from Companies House API. Please check your connection.');
           }
           throw error;
         } finally {
           clearTimeout(timeoutId);
         }
-      },
+      }
     };
   }
 
@@ -92,22 +89,16 @@ export class BaseApiClient {
 
     switch (status) {
       case 401:
-        throw new Error(
-          `Authentication failed: ${message}. Please check your API key.`
-        );
+        throw new Error(`Authentication failed: ${message}. Please check your API key.`);
       case 404:
         throw new Error(`Resource not found: ${message}`);
       case 429:
-        throw new Error(
-          `Rate limit exceeded: ${message}. Please try again later.`
-        );
+        throw new Error(`Rate limit exceeded: ${message}. Please try again later.`);
       case 500:
       case 502:
       case 503:
       case 504:
-        throw new Error(
-          `Server error: ${message}. Please try again later.`
-        );
+        throw new Error(`Server error: ${message}. Please try again later.`);
       default:
         throw new Error(`API error (${status}): ${message}`);
     }
@@ -116,7 +107,7 @@ export class BaseApiClient {
   async testConnection(): Promise<boolean> {
     try {
       await this.client.get('/search/companies', {
-        params: { q: 'test', items_per_page: 1 },
+        params: { q: 'test', items_per_page: 1 }
       });
       return true;
     } catch {
