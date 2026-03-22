@@ -10,7 +10,7 @@ function jsonResponse(data: unknown, status = 200): Response {
     status,
     statusText: 'OK',
     json: () => Promise.resolve(data),
-    headers: new Headers(),
+    headers: new Headers()
   } as Response;
 }
 
@@ -24,7 +24,7 @@ function errorResponse(
     status,
     statusText,
     json: () => Promise.resolve(body),
-    headers: new Headers(),
+    headers: new Headers()
   } as Response;
 }
 
@@ -35,7 +35,7 @@ describe('CompaniesHouseApiClient', () => {
     mockFetch.mockReset();
     apiClient = new CompaniesHouseApiClient({
       apiKey: 'test-api-key',
-      baseUrl: 'https://api.test.com',
+      baseUrl: 'https://api.test.com'
     });
   });
 
@@ -49,7 +49,7 @@ describe('CompaniesHouseApiClient', () => {
 
       await apiClient.company.searchCompanies({ query: 'test' });
 
-      const [url, options] = mockFetch.mock.calls[0];
+      const [, options] = mockFetch.mock.calls[0];
       expect(options.headers.Authorization).toBe(
         'Basic ' + Buffer.from('test-api-key:').toString('base64')
       );
@@ -70,14 +70,14 @@ describe('CompaniesHouseApiClient', () => {
     it('should search companies with correct parameters', async () => {
       const mockData = {
         items: [{ company_name: 'Test Company' }],
-        total_results: 1,
+        total_results: 1
       };
       mockFetch.mockResolvedValue(jsonResponse(mockData));
 
       const result = await apiClient.company.searchCompanies({
         query: 'test',
         items_per_page: 10,
-        start_index: 0,
+        start_index: 0
       });
 
       const [url] = mockFetch.mock.calls[0];
@@ -106,12 +106,12 @@ describe('CompaniesHouseApiClient', () => {
       const mockData = {
         company_name: 'Test Company Ltd',
         company_number: '12345678',
-        jurisdiction: 'england-wales',
+        jurisdiction: 'england-wales'
       };
       mockFetch.mockResolvedValue(jsonResponse(mockData));
 
       const result = await apiClient.company.getCompanyProfile({
-        company_number: '12345678',
+        company_number: '12345678'
       });
 
       const [url] = mockFetch.mock.calls[0];
@@ -123,7 +123,7 @@ describe('CompaniesHouseApiClient', () => {
   describe('getOfficers', () => {
     it('should get officers with all parameters', async () => {
       const mockData = {
-        items: [{ name: 'John Doe', officer_role: 'director' }],
+        items: [{ name: 'John Doe', officer_role: 'director' }]
       };
       mockFetch.mockResolvedValue(jsonResponse(mockData));
 
@@ -131,7 +131,7 @@ describe('CompaniesHouseApiClient', () => {
         company_number: '12345678',
         items_per_page: 50,
         start_index: 10,
-        register_type: 'directors',
+        register_type: 'directors'
       });
 
       const [url] = mockFetch.mock.calls[0];
@@ -159,7 +159,7 @@ describe('CompaniesHouseApiClient', () => {
   describe('getFilingHistory', () => {
     it('should get filing history with all parameters', async () => {
       const mockData = {
-        items: [{ type: 'AA', date: '2024-01-01' }],
+        items: [{ type: 'AA', date: '2024-01-01' }]
       };
       mockFetch.mockResolvedValue(jsonResponse(mockData));
 
@@ -167,7 +167,7 @@ describe('CompaniesHouseApiClient', () => {
         company_number: '12345678',
         items_per_page: 30,
         start_index: 5,
-        category: 'accounts',
+        category: 'accounts'
       });
 
       const [url] = mockFetch.mock.calls[0];
@@ -185,21 +185,19 @@ describe('CompaniesHouseApiClient', () => {
         items: [
           {
             name: 'Jane Smith',
-            kind: 'individual-person-with-significant-control',
-          },
-        ],
+            kind: 'individual-person-with-significant-control'
+          }
+        ]
       };
       mockFetch.mockResolvedValue(jsonResponse(mockData));
 
       const result = await apiClient.psc.getPersonsWithSignificantControl({
         company_number: '12345678',
-        items_per_page: 20,
+        items_per_page: 20
       });
 
       const [url] = mockFetch.mock.calls[0];
-      expect(url).toContain(
-        '/company/12345678/persons-with-significant-control'
-      );
+      expect(url).toContain('/company/12345678/persons-with-significant-control');
       expect(url).toContain('items_per_page=20');
       expect(result).toEqual(mockData);
     });
@@ -208,12 +206,12 @@ describe('CompaniesHouseApiClient', () => {
   describe('getCharges', () => {
     it('should get charges correctly', async () => {
       const mockData = {
-        items: [{ charge_number: 1, status: 'outstanding' }],
+        items: [{ charge_number: 1, status: 'outstanding' }]
       };
       mockFetch.mockResolvedValue(jsonResponse(mockData));
 
       const result = await apiClient.charges.getCharges({
-        company_number: '12345678',
+        company_number: '12345678'
       });
 
       const [url] = mockFetch.mock.calls[0];
@@ -246,21 +244,15 @@ describe('CompaniesHouseApiClient', () => {
 
   describe('error handling', () => {
     it('should handle 401 authentication error', async () => {
-      mockFetch.mockResolvedValue(
-        errorResponse(401, { error: 'Invalid API key' })
-      );
+      mockFetch.mockResolvedValue(errorResponse(401, { error: 'Invalid API key' }));
 
-      await expect(
-        apiClient.company.searchCompanies({ query: 'test' })
-      ).rejects.toThrow(
+      await expect(apiClient.company.searchCompanies({ query: 'test' })).rejects.toThrow(
         'Authentication failed: Invalid API key. Please check your API key.'
       );
     });
 
     it('should handle 404 not found error', async () => {
-      mockFetch.mockResolvedValue(
-        errorResponse(404, { error: 'Company not found' })
-      );
+      mockFetch.mockResolvedValue(errorResponse(404, { error: 'Company not found' }));
 
       await expect(
         apiClient.company.getCompanyProfile({ company_number: '99999999' })
@@ -268,37 +260,25 @@ describe('CompaniesHouseApiClient', () => {
     });
 
     it('should handle 429 rate limit error', async () => {
-      mockFetch.mockResolvedValue(
-        errorResponse(429, { error: 'Too many requests' })
-      );
+      mockFetch.mockResolvedValue(errorResponse(429, { error: 'Too many requests' }));
 
-      await expect(
-        apiClient.company.searchCompanies({ query: 'test' })
-      ).rejects.toThrow(
+      await expect(apiClient.company.searchCompanies({ query: 'test' })).rejects.toThrow(
         'Rate limit exceeded: Too many requests. Please try again later.'
       );
     });
 
     it('should handle server errors', async () => {
-      mockFetch.mockResolvedValue(
-        errorResponse(500, { error: 'Internal server error' })
-      );
+      mockFetch.mockResolvedValue(errorResponse(500, { error: 'Internal server error' }));
 
-      await expect(
-        apiClient.company.searchCompanies({ query: 'test' })
-      ).rejects.toThrow(
+      await expect(apiClient.company.searchCompanies({ query: 'test' })).rejects.toThrow(
         'Server error: Internal server error. Please try again later.'
       );
     });
 
     it('should handle network errors', async () => {
-      mockFetch.mockRejectedValue(
-        new TypeError('fetch failed')
-      );
+      mockFetch.mockRejectedValue(new TypeError('fetch failed'));
 
-      await expect(
-        apiClient.company.searchCompanies({ query: 'test' })
-      ).rejects.toThrow(
+      await expect(apiClient.company.searchCompanies({ query: 'test' })).rejects.toThrow(
         'No response from Companies House API. Please check your connection.'
       );
     });
@@ -306,9 +286,9 @@ describe('CompaniesHouseApiClient', () => {
     it('should handle unknown errors', async () => {
       mockFetch.mockRejectedValue(new Error('Unknown error'));
 
-      await expect(
-        apiClient.company.searchCompanies({ query: 'test' })
-      ).rejects.toThrow('Unknown error');
+      await expect(apiClient.company.searchCompanies({ query: 'test' })).rejects.toThrow(
+        'Unknown error'
+      );
     });
   });
 });
