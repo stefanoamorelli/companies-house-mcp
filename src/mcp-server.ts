@@ -1,5 +1,8 @@
+import { createRequire } from 'node:module';
+import http from 'node:http';
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import { CompaniesHouseApiClient } from './api/client.js';
 import { getAllTools } from './tools/tools-definition.js';
@@ -10,6 +13,9 @@ import { FilingHandlers } from './handlers/filing-handlers.js';
 import { ChargesHandlers } from './handlers/charges-handlers.js';
 import { PSCHandlers } from './handlers/psc-handlers.js';
 import { DocumentHandlers } from './handlers/document-handlers.js';
+
+const require = createRequire(import.meta.url);
+const { version: SERVER_VERSION } = require('../package.json') as { version: string };
 
 export interface ServerConfig {
   apiKey: string;
@@ -31,7 +37,7 @@ export class CompaniesHouseMCPServer {
     this.server = new Server(
       {
         name: 'companies-house-mcp',
-        version: '2.0.0'
+        version: SERVER_VERSION
       },
       {
         capabilities: {
@@ -172,12 +178,40 @@ export class CompaniesHouseMCPServer {
     });
   }
 
-  async start(): Promise<void> {
-    const transport = new StdioServerTransport();
-    await this.server.connect(transport);
+  async start(options?: { transport?: 'stdio' | 'streamable-http'; port?: number }): Promise<void> {
+    const mode = options?.transport ?? 'stdio';
+    const toolCount = getAllTools().length;
 
-    console.error('Companies House MCP Server v2.0.0 running on stdio');
-    console.error(`Loaded ${getAllTools().length} tools`);
+    if (mode === 'streamable-http') {
+      const port = options?.port ?? 3000;
+      const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
+      await this.server.connect(transport);
+
+      const httpServer = http.createServer(async (req, res) => {
+        if (req.method === 'POST' && req.url === '/mcp') {
+          await transport.handleRequest(req, res);
+        } else if (req.method === 'GET' && req.url === '/mcp') {
+          await transport.handleRequest(req, res);
+        } else if (req.method === 'DELETE' && req.url === '/mcp') {
+          await transport.handleRequest(req, res);
+        } else {
+          res.writeHead(404).end();
+        }
+      });
+
+      httpServer.listen(port, () => {
+        console.error(
+          `Companies House MCP Server v${SERVER_VERSION} running on http://localhost:${port}/mcp`
+        );
+        console.error(`Loaded ${toolCount} tools`);
+      });
+    } else {
+      const transport = new StdioServerTransport();
+      await this.server.connect(transport);
+
+      console.error(`Companies House MCP Server v${SERVER_VERSION} running on stdio`);
+      console.error(`Loaded ${toolCount} tools`);
+    }
   }
 
   getServer(): Server {

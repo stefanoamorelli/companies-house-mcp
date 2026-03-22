@@ -14,13 +14,20 @@ async function main() {
     process.exit(1);
   }
 
+  const args = process.argv.slice(2);
+  const transportIdx = args.indexOf('--transport');
+  const transport =
+    transportIdx !== -1 ? (args[transportIdx + 1] as 'stdio' | 'streamable-http') : 'stdio';
+  const portIdx = args.indexOf('--port');
+  const port = portIdx !== -1 ? parseInt(args[portIdx + 1], 10) : 3000;
+
   try {
     const server = new CompaniesHouseMCPServer({
       apiKey,
       baseUrl: process.env.COMPANIES_HOUSE_API_URL
     });
 
-    await server.start();
+    await server.start({ transport, port });
   } catch (error) {
     console.error('Failed to start server:', error);
     process.exit(1);
