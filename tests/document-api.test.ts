@@ -10,7 +10,7 @@ function jsonResponse(data: unknown, status = 200): Response {
     status,
     statusText: 'OK',
     json: () => Promise.resolve(data),
-    headers: new Headers(),
+    headers: new Headers()
   } as Response;
 }
 
@@ -20,7 +20,7 @@ function arrayBufferResponse(buffer: ArrayBuffer, status = 200): Response {
     status,
     statusText: 'OK',
     arrayBuffer: () => Promise.resolve(buffer),
-    headers: new Headers(),
+    headers: new Headers()
   } as Response;
 }
 
@@ -46,14 +46,14 @@ describe('DocumentApiClient', () => {
         filename: 'document.pdf',
         links: {
           self: '/document/doc123',
-          document: '/document/doc123/content',
-        },
+          document: '/document/doc123/content'
+        }
       };
 
       mockFetch.mockResolvedValue(jsonResponse(mockData));
 
       const result = await apiClient.getDocumentMetadata({
-        document_id: 'doc123',
+        document_id: 'doc123'
       });
 
       const [url, options] = mockFetch.mock.calls[0];
@@ -68,9 +68,9 @@ describe('DocumentApiClient', () => {
     it('should handle errors when fetching metadata', async () => {
       mockFetch.mockRejectedValue(new Error('API Error'));
 
-      await expect(
-        apiClient.getDocumentMetadata({ document_id: 'doc123' })
-      ).rejects.toThrow('API Error');
+      await expect(apiClient.getDocumentMetadata({ document_id: 'doc123' })).rejects.toThrow(
+        'API Error'
+      );
     });
   });
 
@@ -80,7 +80,7 @@ describe('DocumentApiClient', () => {
       mockFetch.mockResolvedValue(arrayBufferResponse(mockPdfData));
 
       const result = await apiClient.getDocumentContent({
-        document_id: 'doc123',
+        document_id: 'doc123'
       });
 
       const [url, options] = mockFetch.mock.calls[0];
@@ -93,9 +93,9 @@ describe('DocumentApiClient', () => {
     it('should handle errors when fetching content', async () => {
       mockFetch.mockRejectedValue(new Error('Failed to fetch document'));
 
-      await expect(
-        apiClient.getDocumentContent({ document_id: 'doc123' })
-      ).rejects.toThrow('Failed to fetch document');
+      await expect(apiClient.getDocumentContent({ document_id: 'doc123' })).rejects.toThrow(
+        'Failed to fetch document'
+      );
     });
   });
 });
