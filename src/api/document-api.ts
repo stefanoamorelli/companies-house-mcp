@@ -1,4 +1,3 @@
-import axios, { AxiosInstance } from 'axios';
 import type {
   DocumentMetadata,
   DocumentContent,
@@ -6,38 +5,51 @@ import type {
 } from '../types/document.js';
 
 export class DocumentApiClient {
-  private documentClient: AxiosInstance;
+  private baseURL: string;
+  private authHeader: string;
 
   constructor(apiKey: string) {
-    this.documentClient = axios.create({
-      baseURL: 'https://document-api.company-information.service.gov.uk',
-      auth: {
-        username: apiKey,
-        password: ''
-      },
-      timeout: 30000
-    });
+    this.baseURL = 'https://document-api.company-information.service.gov.uk';
+    this.authHeader = 'Basic ' + Buffer.from(apiKey + ':').toString('base64');
   }
 
   async getDocumentMetadata(params: DocumentMetadata): Promise<DocumentMetadataResponse> {
     const documentId = this.extractDocumentId(params.document_id);
-    const response = await this.documentClient.get(`/document/${documentId}`, {
+    const url = `${this.baseURL}/document/${documentId}`;
+
+    const response = await fetch(url, {
+      method: 'GET',
       headers: {
-        Accept: 'application/json'
+        Accept: 'application/json',
+        Authorization: this.authHeader
       }
     });
-    return response.data;
+
+    if (!response.ok) {
+      throw new Error(`API error (${response.status}): ${response.statusText}`);
+    }
+
+    return (await response.json()) as DocumentMetadataResponse;
   }
 
   async getDocumentContent(params: DocumentContent): Promise<Buffer> {
     const documentId = this.extractDocumentId(params.document_id);
-    const response = await this.documentClient.get(`/document/${documentId}/content`, {
-      responseType: 'arraybuffer',
+    const url = `${this.baseURL}/document/${documentId}/content`;
+
+    const response = await fetch(url, {
+      method: 'GET',
       headers: {
-        Accept: 'application/pdf'
+        Accept: 'application/pdf',
+        Authorization: this.authHeader
       }
     });
-    return Buffer.from(response.data);
+
+    if (!response.ok) {
+      throw new Error(`API error (${response.status}): ${response.statusText}`);
+    }
+
+    const arrayBuffer = await response.arrayBuffer();
+    return Buffer.from(arrayBuffer);
   }
 
   private extractDocumentId(input: string): string {

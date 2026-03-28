@@ -1,62 +1,106 @@
-import axios, { AxiosInstance } from 'axios';
-
 export interface ApiConfig {
   apiKey: string;
   baseUrl?: string;
 }
 
+interface RequestOptions {
+  params?: Record<string, unknown>;
+  headers?: Record<string, string>;
+  responseType?: string;
+}
+
+interface FetchResponse {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data: any;
+  status: number;
+}
+
+interface HttpClient {
+  get(path: string, options?: RequestOptions): Promise<FetchResponse>;
+}
+
 export class BaseApiClient {
-  protected client: AxiosInstance;
+  protected client: HttpClient;
   protected apiKey: string;
 
   constructor(config: ApiConfig) {
     this.apiKey = config.apiKey;
     const baseURL = config.baseUrl || 'https://api.company-information.service.gov.uk';
+    const authHeader = 'Basic ' + Buffer.from(this.apiKey + ':').toString('base64');
 
-    this.client = axios.create({
-      baseURL,
-      auth: {
-        username: this.apiKey,
-        password: ''
-      },
-      headers: {
-        Accept: 'application/json'
-      },
-      timeout: 30000
-    });
+    this.client = {
+      get: async (path: string, options?: RequestOptions): Promise<FetchResponse> => {
+        const url = new URL(path, baseURL);
+        if (options?.params) {
+          for (const [key, value] of Object.entries(options.params)) {
+            if (value !== undefined && value !== null) {
+              url.searchParams.append(key, String(value));
+            }
+          }
+        }
 
-    this.client.interceptors.response.use(
-      (response) => response,
-      (error) => Promise.reject(this.transformError(error))
-    );
+        const headers: Record<string, string> = {
+          Accept: 'application/json',
+          Authorization: authHeader,
+          ...options?.headers
+        };
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 30000);
+
+        try {
+          const response = await fetch(url.toString(), {
+            method: 'GET',
+            headers,
+            signal: controller.signal
+          });
+
+          if (!response.ok) {
+            await this.handleErrorResponse(response);
+          }
+
+          const data = await response.json();
+          return { data, status: response.status };
+        } catch (error) {
+          if (
+            error instanceof TypeError &&
+            (error.message.includes('fetch') || error.message.includes('network'))
+          ) {
+            throw new Error('No response from Companies House API. Please check your connection.');
+          }
+          throw error;
+        } finally {
+          clearTimeout(timeoutId);
+        }
+      }
+    };
   }
 
-  private transformError(error: unknown): Error {
-    if (axios.isAxiosError(error) && error.response) {
-      const status = error.response.status;
-      const message = (error.response.data as Record<string, unknown>)?.error || error.message;
+  private async handleErrorResponse(response: Response): Promise<never> {
+    let message: string;
+    try {
+      const body = (await response.json()) as Record<string, unknown>;
+      message = (body?.error as string) || response.statusText;
+    } catch {
+      message = response.statusText;
+    }
 
-      switch (status) {
-        case 401:
-          return new Error(`Authentication failed: ${message}. Please check your API key.`);
-        case 404:
-          return new Error(`Resource not found: ${message}`);
-        case 429:
-          return new Error(`Rate limit exceeded: ${message}. Please try again later.`);
-        case 500:
-        case 502:
-        case 503:
-        case 504:
-          return new Error(`Server error: ${message}. Please try again later.`);
-        default:
-          return new Error(`API error (${status}): ${message}`);
-      }
-    } else if (axios.isAxiosError(error) && error.request) {
-      return new Error('No response from Companies House API. Please check your connection.');
-    } else if (error instanceof Error) {
-      return new Error(`Request error: ${error.message}`);
-    } else {
-      return new Error('An unexpected error occurred');
+    const status = response.status;
+
+    switch (status) {
+      case 401:
+        throw new Error(`Authentication failed: ${message}. Please check your API key.`);
+      case 404:
+        throw new Error(`Resource not found: ${message}`);
+      case 429:
+        throw new Error(`Rate limit exceeded: ${message}. Please try again later.`);
+      case 500:
+      case 502:
+      case 503:
+      case 504:
+        throw new Error(`Server error: ${message}. Please try again later.`);
+      default:
+        throw new Error(`API error (${status}): ${message}`);
     }
   }
 
