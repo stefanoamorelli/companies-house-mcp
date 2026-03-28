@@ -10,8 +10,7 @@ export class DocumentApiClient {
 
   constructor(apiKey: string) {
     this.baseURL = 'https://document-api.company-information.service.gov.uk';
-    this.authHeader =
-      'Basic ' + Buffer.from(apiKey + ':').toString('base64');
+    this.authHeader = 'Basic ' + Buffer.from(apiKey + ':').toString('base64');
   }
 
   async getDocumentMetadata(params: DocumentMetadata): Promise<DocumentMetadataResponse> {
@@ -22,8 +21,8 @@ export class DocumentApiClient {
       method: 'GET',
       headers: {
         Accept: 'application/json',
-        Authorization: this.authHeader,
-      },
+        Authorization: this.authHeader
+      }
     });
 
     if (!response.ok) {
@@ -41,8 +40,8 @@ export class DocumentApiClient {
       method: 'GET',
       headers: {
         Accept: 'application/pdf',
-        Authorization: this.authHeader,
-      },
+        Authorization: this.authHeader
+      }
     });
 
     if (!response.ok) {
