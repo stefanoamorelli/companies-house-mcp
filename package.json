@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@types/node": "^25.5.0",
-    "@vitest/coverage-v8": "^2.1.1",
+    "@vitest/coverage-v8": "^4.1.2",
     "eslint": "^9.11.1",
     "prettier": "^3.3.3",
     "tsx": "^4.19.1",
