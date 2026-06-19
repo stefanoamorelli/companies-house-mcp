@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/stefanoamorelli-companies-house-mcp-badge.png)](https://mseep.ai/app/stefanoamorelli-companies-house-mcp)
+
 # Companies House MCP Server
 
 ![Companies House MCP Server - Demo](https://github.com/user-attachments/assets/652267a6-9378-4edb-92fb-6be1b90122ec)
